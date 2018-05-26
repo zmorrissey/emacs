@@ -1,0 +1,1352 @@
+#+TITLE: Emacs configuration
+#+DATE: 
+#+AUTHOR: Zachery D. Morrissey 
+#+STARTUP: indent
+
+* Add resources to load path
+#+BEGIN_SRC emacs-lisp
+;;(add-to-list 'load-path "~/.emacs.d/elpa/")
+#+END_SRC
+Ensure environment variables inside Emacs looks the same as in the user's shell
+#+BEGIN_SRC emacs-lisp
+;;(when (memq window-system '(mac ns x))
+;;  (exec-path-from-shell-initialize))
+#+END_SRC
+* Utility functions
+For custom-made functions
+** TODO Org-ref sort all citations by date
+:OUTLINE:
+1. Move point to beginning of the document
+2. Search for the string =cite:=
+3. Move point to that string.
+4. Execute the command =org-ref-sort-citation-link=.
+5. Repeat steps 2-4 until the end of the document.
+:END:
+#+BEGIN_SRC emacs-lisp
+;  (defun org-ref-sort-citations ()	; Define a function
+;    "Sort all citations in an org document by date using org-ref" ;
+;   (push-mark) ; Save the current location so 'pop-global-mark' can return here
+;    (goto-char 0)				; Start at the top of the file
+;    (when (regexp-quote "cite:") ; Checks if it is true that the string "cite:" exists...
+;      ((re-search-forward "cite:") ; Go to the first occurrence of a citation
+;       (org-ref-sort-citation-links)) ; Sort citations oldest to newest using org-ref
+					  ; "When" will continue to next occurrence of "cite:" until false
+
+;      (t "Done")))      ; If there are no more occurrences, print "Done"
+
+
+
+  ;If regexp search match "cite:" is true,
+  ;goto next occurrence and execute org-ref command
+  ;
+  ;else, 
+  ;return to push-mark
+
+#+END_SRC
+* UI preferences
+** Diminish mode
+   :PROPERTIES:
+   :ID:       0ffbbcf8-5c2c-4368-a0a2-281563834150
+   :END:
+Specifies extraneous modes to either hide or abbreviate to reduce clutter from the modeline.
+#+BEGIN_SRC emacs-lisp
+  (require 'diminish)
+  ;; Hide from mode line
+  (diminish 'which-key-mode)
+  (diminish 'abbrev-mode)
+  (diminish 'undo-tree-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'smartparens-mode)
+  (diminish 'org-indent-mode)
+  ;; Replace abbrev-mode lighter with "Abv"
+  (diminish 'palimpsest-mode "Plmpst")
+  (diminish 'abbrev-mode "Abv")
+  (diminish 'org-mode)
+  (diminish 'evil-org-mode)
+  (diminish 'auto-complete-mode)
+  (diminish 'projectile-mode)
+  (put 'scroll-left 'disabled nil)
+  (put 'dired-find-alternate-file 'disabled nil)
+#+END_SRC
+** Frame resizing
+#+BEGIN_SRC emacs-lisp
+  ; Shortcut to reset horizontal frame size to 80 columns
+  (defun fix-frame-horizontal-size (width)
+    "Set the frame's size to 80 (or prefix arg WIDTH) columns wide."
+    (interactive "P")
+    (if window-system
+	(set-frame-width (selected-frame) (or width 80))
+      (error "Cannot resize frame horizontally: is a text terminal")))
+
+  (defun fix-window-horizontal-size (width)
+    "Set the window's size to 80 (or prefix arg WIDTH) columns wide."
+    (interactive "P")
+    (enlarge-window (- (or width 80) (window-width)) 'horizontal))
+
+  (defun fix-horizontal-size (width)
+    "Set the window's or frame's width to 80 (or prefix arg WIDTH)."
+    (interactive "P")
+    (condition-case nil
+	(fix-window-horizontal-size width)
+      (error 
+       (condition-case nil
+	   (fix-frame-horizontal-size width)
+	 (error
+	  (error "Cannot resize window or frame horizontally"))))))
+
+  (global-set-key (kbd "C-x W") 'fix-horizontal-size)
+
+  ;; Shortcut to maximize frame width to screen
+  (defun calc-max-frame-width ()
+      (/ (- (x-display-pixel-width) 18) (frame-char-width)))
+      
+  (defun maximize-frame-width ()
+    (interactive)
+    (if window-system
+	(set-frame-width (selected-frame) 'calc-max-frame-width)))
+
+  (global-set-key (kbd "C-x M") 'maximize-frame-width)
+#+END_SRC
+** Frame font
+
+When creating new frames, respect default font settings
+
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+** Frame size at startup
+#+BEGIN_SRC emacs-lisp
+;;  (add-to-list 'default-frame-alist '(height . 37))
+;;  (add-to-list 'default-frame-alist '(width . 80))
+
+
+  ;;Detect screen resolution for determining max frame length
+;  (defun set-frame-size-according-to-resolution ()
+;    (interactive)
+;    (if (window-system)
+;    (progn
+;      ;; use 120 char wide window for largeish displays
+;      ;; and smaller 80 column windows for smaller displays
+;      ;; pick whatever numbers make sense for you
+;      (if (> (x-display-pixel-width) 1280)
+;	     (add-to-list 'default-frame-alist (cons 'width 120))
+;	     (add-to-list 'default-frame-alist (cons 'width 80)))
+;      ;; for the height, subtract a couple hundred pixels
+;      ;; from the screen height (for panels, menubars and
+;      ;; whatnot), then divide by the height of a char to
+;      ;; get the height we want
+;      (add-to-list 'default-frame-alist 
+;	   (cons 'height (/ (- (x-display-pixel-height) 200)
+;			       (frame-char-height)))))))
+;
+;  (set-frame-size-according-to-resolution)
+ 
+  ;; Set frame size using maxframe.el
+  ;(require 'maxframe')
+  ;; Set max width to 80px
+  ;(setq mf-max-width 80)
+  ;(add-hook 'window-setup-hook 'maximize-frame t) 
+#+END_SRC
+** Fringe
+Change fringe settings
+
+#+BEGIN_SRC emacs-lisp
+    (defun my-tone-down-fringes ()
+      ;; Set fringe color to match background color of theme
+      (set-face-attribute 'fringe nil
+                          :foreground (face-background 'default)
+                          :background (face-background 'default)))
+
+  (my-tone-down-fringes)
+  ;  (add-hook 'emacs-startup-hook 'my-tone-down-fringes)
+#+END_SRC
+** Global line numbers
+#+BEGIN_SRC emacs-lisp
+; (global-linum-mode 1)
+#+END_SRC
+** Highlight matching parantheses
+#+BEGIN_SRC emacs-lisp
+(show-paren-mode 1)
+#+END_SRC
+** Minimap
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+** Miscellaneous
+   #+BEGIN_SRC emacs-lisp
+     (set-frame-font "Ubuntu Mono 12" nil t)
+          (custom-set-variables
+           '(desktop-save-mode nil)
+           '(blink-cursor-mode nil)
+           ;'(fringe-mode nil nil (fringe))
+           '(global hl-line-mode t)
+           '(inhibit-startup-screen nil)
+           '(smartparens-global-mode t)
+           '(tool-bar-mode nil)
+           '(gud-tooltip-mode t)
+           '(scroll-bar-mode nil)
+           )
+
+          (custom-set-faces
+           '(cursor ((t (:background "turquoise1"))))
+           ;'(fringe ((t (:inherit default))))
+           '(linum ((t (:inherit default))))
+           '(default ((t (:inherit nil
+                                  :stipple nil
+                                  :inverse-video nil
+                                  :box nil
+                                  :strike-through nil
+                                  :overline nil
+                                  :underline nil
+                                  :slant normal
+                                  :weight normal
+                                  :height 140
+                                  :width normal
+                                  :foundry "nil"
+                                  :family "Ubuntu Mono"))))
+           )
+           
+#+END_SRC
+** Neotree
+#+BEGIN_SRC emacs-lisp
+  ;; Neotree toggle button
+  (global-set-key [f8] 'neotree-toggle)
+
+  ;; Classic theme
+  (setq neo-theme 'ascii)
+
+  ;; Use icons for window system and arrow terminal
+  ;(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+
+  ;; Find current file and jump to that node
+  (setq neo-smart-open t)
+
+  ;; Work with projectile to change root automatically
+  (setq projectile-switch-project-action 'neotree-projectile-action)
+
+#+END_SRC
+** nlinum mode
+Another line number mode (I think?)
+#+BEGIN_SRC emacs-lisp
+;;(nlinum-mode 1)
+;; (global-nlinum-mode)
+(add-hook 'prog-mode-hook 'nlinum-mode t)
+#+END_SRC
+** Rainbow delimiters
+#+BEGIN_SRC emacs-lisp
+;; To start rainbow-delimiters-mode in foo-mode
+;; (add-hook 'foo-mode-hook #'rainbow-delimiters-mode)
+
+;; To activate rainbow delimiters in most major programming modes
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+#+END_SRC
+** Relative line numbers
+#+BEGIN_SRC emacs-lisp
+;;  (require 'linum-relative)
+
+  ;; (define-globalized-minor-mode my-global-linum-relative-mode linum-relative-mode
+  ;;   (lambda ()
+  ;;     (unless (or (minibufferp)
+  ;;                 (derived-mode-p 
+  ;;                   'doc-view-mode
+  ;;                   'shell-mode 
+  ;;                   'org-mode
+  ;;                   'org-agenda
+  ;;                 )
+  ;;             )
+  ;;       (linum-relative-mode 1))))
+  ;; (my-global-linum-relative-mode 1)
+;;  (defun my-linum-relative-mode-hook ()
+;;    (linum-relative-mode 1))
+;;  (add-hook 'prog-mode-hook 'my-linum-relative-mode-hook)
+  
+#+END_SRC
+** Scrolling
+#+BEGIN_SRC emacs-lisp
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
+#+END_SRC
+** Smart-parens
+#+BEGIN_SRC emacs-lisp
+(require 'smartparens-config)
+#+END_SRC
+** Sublimity
+#+BEGIN_SRC emacs-lisp
+  ;(require 'sublimity)
+  ;(sublimity-mode 1)
+  ;(require 'sublimity-map)
+  ;
+  ;;; Customize map dimensions
+  ;(setq sublimity-map-size 20)
+  ;(setq sublimity-map-fraction 0.8)
+  ;(setq sublimity-map-text-scale -7)
+  ;
+  ;;; Map setup
+  ;(add-hook 'sublimity-map-setup-hook
+  ;          (lambda ()
+  ;          (setq buffer-face-mode-face '(:family "Monospace"))
+  ;          (buffer-face-mode)))
+  ;
+  ;;; Customize delay
+  ;(sublimity-map-set-delay 1)
+#+END_SRC
+** Themes
+*** Doom theme
+I prefer to use a slightly customized version of the =doom-one theme=.
+#+BEGIN_SRC emacs-lisp
+;  (require 'doom-themes)
+;  (setq doom-themes-enable-bold nil
+;        doom-themes-enable-italic nil)
+;
+;  (load-theme 'doom-one t) ;; or doom-dark, etc.
+;
+;  ;; Enable flashing mode-line erros
+;  (doom-themes-visual-bell-config)
+;
+;  ;; Corrects (and improves) org-mode's native fontification
+;  (doom-themes-org-config)
+;
+;  ;; Set org levels the same
+;  ;(defun my/org-mode-hook ()
+;  ;  (set-face-attribute 'org-level-1 nil :height 1.0 :background nil))
+;  ;(add-hook 'org-load-hook #'my/org-mode-hook)
+;  (set-face-attribute 'org-level-1 nil :height 1.0 :background nil)
+;  (set-face-attribute 'org-level-2 nil :height 1.0 :background nil)
+#+END_SRC
+*** Solarized
+#+BEGIN_SRC emacs-lisp
+  ;(load-theme 'solarized-dark)
+#+END_SRC
+*** Zenburn
+    Zenburn is also another theme I like.
+
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'zenburn t)
+#+END_SRC
+** Turn off alarm bell
+#+BEGIN_SRC emacs-lisp
+(setq ring-bell-function 'ignore)
+#+END_SRC
+** Visual line mode 
+Does not wrap words at end of line
+ #+BEGIN_SRC emacs-lisp
+ (global-visual-line-mode 1)
+ #+END_SRC
+** Which-key
+After beginning a keybinding prefix, after a specified =delay= displays a minibuffer with defined completions
+#+BEGIN_SRC emacs-lisp
+;(which-key-mode)
+; (setq which-key-idle-delay 0.5) ; changes delay time
+#+END_SRC
+* Programming customizations
+** Bash
+
+Automatically make shell scripts executable upon save.
+
+#+BEGIN_SRC emacs-lisp
+   (add-hook 'after-save-hook
+      'executable-make-buffer-file-executable-if-script-p)
+#+END_SRC
+** C
+*** Cc-mode
+    #+BEGIN_SRC emacs-lisp
+    
+(add-to-list 'load-path "~/.emacs.d/elpa/cc-mode-5.33")
+    
+    #+END_SRC
+** Debugger
+C/C++ 
+#+BEGIN_SRC emacs-lisp
+(setq gdb-command-name "/usr/local/bin/gdb")
+#+END_SRC
+
+Python
+#+BEGIN_SRC emacs-lisp
+  (setenv "PATH" (concat"/Library/Frameworks/Python.framework/Versions/3.4/bin/pdb" (getenv "PATH")))
+  (setq exec-path (split-string (getenv "PATH") path-separator))
+  ;;(setq pdb-command-name "/Library/Frameworks/Python.framework/Versions/3.4/bin/pdb")
+#+END_SRC
+** Javascript
+*** js2
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'auto-mode-alist '("\\.js\\'". js2-mode))
+(add-hook 'js-mode-hook 'js2-minor-mode)
+
+;; ac-js2 for JavaScript autocompletion
+(add-hook 'js2-mode-hook 'ac-js2-mode)
+#+END_SRC
+** Magit
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x g") 'magit-status)
+; Diff-hl: highlights uncommitted changes (git)
+(require 'diff-hl)
+#+END_SRC
+** MATLAB
+#+BEGIN_SRC emacs-lisp
+      ;; Replace path below to be where your matlab.el file is.
+  ;;    (add-to-list 'load-path "~/.emacs.d/elpa/matlab-mode-20160902.459/")
+  ;;   (load-library "matlab-load")
+
+      ;; Enable CEDET feature support for MATLAB code. (Optional)
+      ;; (matlab-cedet-setup)
+
+      ;; MATLAB path mac
+      ;; CLI matlab from the shell:
+      ;; /Applications/MATLAB_R2016a.app/bin/matlab -nodesktop
+      ;; elisp setup for matlab-mode:
+      (setq matlab-shell-command "/usr/local/MATLAB/R2017b/bin/matlab")
+      (setq matlab-shell-command-switches (list "-nodesktop"))
+
+
+      ;; Replicate C-c termination
+      (defun my-matlab-shell-mode-hook ()
+        (global-set-key "C-c" 'interrupt-process))
+
+      (add-hook 'matlab-shell-hook 'my-matlab-shell-hook)
+
+
+      ;; Turn on programming mode minor modes: nlinum-mode, rainbow-delimiters-mode,
+      ;; auto-complete-mode
+  (defun my-matlab-mode-hook ()
+    (nlinum-mode 1)
+    (rainbow-delimiters-mode 1)
+    (auto-complete-mode 1))
+
+  (add-hook 'matlab-mode-hook 'my-matlab-mode-hook)
+#+END_SRC
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(projectile-mode)
+#+END_SRC
+** Python
+*** Python 3 compatibility
+#+BEGIN_SRC emacs-lisp
+(package-initialize)
+(elpy-enable)
+
+;; Use python 3 as shell interpreter
+(setq elpy-rpc-python-command "python3")
+(setq python-shell-interpreter "python3")
+
+
+;; PDB
+(setq gud-pdb-command-name "python3 -m pdb")
+#+END_SRC
+*** Anaconda mode
+Code navigation, documentation lookup and completion for Python
+
+| Keybinding | Description                    |
+|------------+--------------------------------|
+| C-M-i      | anaconda-mode-complete         |
+| M-.        | anaoncda-mode-find-definitions |
+| M-,        | anaconda-mode-find-assignments |
+| M-r        | anaconda-mode-find-references  |
+| M-*        | anaconda-mode-go-back          |
+| M-?        | anaconda-mode-show-doc         |
+
+#+BEGIN_SRC emacs-lisp
+;(add-hook 'python-mode-hook 'anaconda-mode)
+#+END_SRC
+** R
+ESS: Emacs Speaks Statistics for working with R in Emacs
+#+BEGIN_SRC emacs-lisp
+  ;;(add-to-list 'load-path "/Users/Zach/.emacs.d/ess-16.04/lisp")
+  ;;(add-to-list 'load-path "/Users/Zach/.emacs.d/")
+  (load "ess-site")
+
+  ;; Rainbow-delimiters
+  (add-hook 'ess-mode-hook #'rainbow-delimiters-mode)
+
+  (add-hook 'ess-mode-hook #'nlinum-mode)
+
+#+END_SRC
+** TeX
+*** AucTeX
+  AucTeX loadpaths, and elisp files for AucTeX and using Preview for PDFs
+  #+BEGIN_SRC emacs-lisp
+     ; (setenv "PATH" (concat "/usr/texbin:/Library/TeX/texbin:" (getenv "PATH")))
+      ;(setq exec-path (append '("/usr/texbin" "/usr/local/bin") exec-path))
+      ;(load "auctex.el" nil t t)
+    ;  (load "preview-latex.el" nil t t)
+
+    ;; Configure for Latex export with minted
+    (setq LaTeX-command-style '(("" "%(PDF)%(latex) -shell-escape %S%(PDFout)")))
+  #+END_SRC
+*** RefTeX + Org-mode
+ #+BEGIN_SRC emacs-lisp
+ (defun org-mode-reftex-setup ()
+ (load-library "reftex")
+ (and (buffer-file-name)
+ (file-exists-p (buffer-file-name))
+ (reftex-parse-all))
+ (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+ )
+ (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+ #+END_SRC
+* Evil mode
+** Custom functions
+#+BEGIN_SRC emacs-lisp
+  (defun evil-newline ()
+    "Create new line without leaving Normal mode"
+    (interactive)
+    (save-excursion
+    (end-of-line)
+    (newline)))
+#+END_SRC
+** Packages
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(package-initialize)
+#+END_SRC
+** Leader key
+Needs to be enabled before evil, otherwise it won't be enabled in initial buffers
+#+BEGIN_SRC emacs-lisp
+(global-evil-leader-mode)
+#+END_SRC
+Leader key default is =\=. =,= is also popular, but I prefer using the =space bar=
+#+BEGIN_SRC emacs-lisp
+(evil-leader/set-leader "<SPC>")
+; (evil-leader/set-leader ",")
+#+END_SRC 
+** Leader keymaps
+Some custom evil-leader keymaps that I frequently use
+#+BEGIN_SRC emacs-lisp
+  (evil-leader/set-key
+  ;; 0-9
+    "0" 'delete-window
+    "1" 'delete-other-windows
+  ;; Symbols
+    "=" 'evil-org-verbatim-word
+    "/" 'evil-org-emph-word
+    "(" 'begin-src-emacs-lisp
+    "[" 'org-checkboxify
+    "RET" 'eval-buffer
+    "<SPC>" 'linum-relative-mode
+  ;; A-Z
+    "B" 'ibuffer
+    "E" 'sudo-edit
+    "I" 'ess-indent-command
+    "M" 'helm-bookmarks
+  ;; a-z
+    "a" 'org-agenda
+    "b" 'helm-buffers-list ; for ido-mode: 'switch-to-buffer
+    "c" 'ledger-mode-clean-buffer
+    "d" 'evil-org-bold-word
+    "e" 'helm-find-files ; for ido-mode: 'find-file
+    "f" 'other-frame
+    "g" 'magit-status
+    "h" 'split-window-below
+    "i" 'package-install
+    "k" 'kill-buffer
+    "l" 'evil-org-open-links
+    "m" 'bookmark-bmenu-list
+    "n" 'nlinum-mode
+    "o" 'evil-newline
+    "p" 'package-list-packages
+    "r" 'helm-multi-files
+    "s" 'org-ref-sort-citation-link
+    "t" 'neotree-toggle
+    "v" 'split-window-right
+    "w" 'other-window
+    "x" 'mark-done-and-archive)
+#+END_SRC
+** Evil
+Default state is vim =<N>=, to make it emacs =<E>=, turn on =(setq evil-default-state 'emacs')=
+#+BEGIN_SRC emacs-lisp
+  (require 'evil)
+  (evil-mode 1)
+  ;(setq evil-default-state 'emacs)
+
+
+  ;; Have <INSERT> state act like <Emacs> state
+  ;(setcdr evil-insert-state-map nil)
+  ;(define-key evil-insert-state-map
+  ;    (read-kbd-macro evil-toggle-key) 'evil-emacs-state)
+
+  ;; Disable evil mode for these modes/buffers
+  (evil-set-initial-state 'help-mode 'emacs)
+  (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'magit-mode 'emacs)
+  (evil-set-initial-state 'calendar-mode 'emacs)
+  (evil-set-initial-state 'discover-mode 'emacs)
+  (evil-set-initial-state 'neotree-mode 'emacs)
+
+#+END_SRC
+** Evil-org
+Uses evil-like keybindings for Org-mode
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/plugins/evil-org-mode")
+(require 'evil-org)
+(add-hook 'org-mode-hook 'evil-org-mode)
+
+;; Keybindings
+(evil-org-set-key-theme '(textobjects insert navigation additional shift todo))
+#+END_SRC
+** Evil-surround
+Add surrounding
+You can surround in visual-state with S<textobject> or gS<textobject>. Or in normal-state with ys<textobject> or yS<textobject>
+
+Change surrounding
+You can change a surrounding with cs<old-textobject><new-textobject>.
+
+Delete surrounding
+You can delete a surrounding with ds<textobject>.
+
+A surround pair is this (trigger char with textual left and right strings):
+(?> . ("<" . ">"))
+ #+BEGIN_SRC emacs-lisp
+ (require 'evil-surround)
+ (global-evil-surround-mode 1)
+ 
+
+;; Fix extra space added when using delimiters
+;; use non-spaced pairs when surrounding with an opening brace
+(evil-add-to-alist
+ 'evil-surround-pairs-alist
+ ?\( '("(" . ")")
+ ?\[ '("[" . "]")
+ ?\{ '("{" . "}")
+ ?\) '("( " . " )")
+ ?\] '("[ " . " ]")
+ ?\} '("{ " . " }"))
+ #+END_SRC
+* Engine mode
+Use =C-x /= prefix followed by assigned keybinding to call
+#+BEGIN_SRC emacs-lisp
+(require 'engine-mode)
+(engine-mode t)
+
+(defengine github
+  "https://github.com/search?ref=simplesearch&q=%s"
+  :keybinding "g")
+
+(defengine duckduckgo
+  "https://duckduckgo.com/?q=%s"
+  :keybinding "d")
+
+(defengine amazon
+  "http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s"
+  :keybinding "a")
+
+(defengine google-maps
+  "http://maps.google.com/maps?q=%s")
+
+(defengine wikipedia
+  "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+  :keybinding "w")
+
+(defengine youtube
+  "http://www.youtube.com/results?aq=f&oq=&search_query=%s"
+  :keybinding "y")
+
+(defengine reddit
+  "https://www.reddit.com/search?q=%s&restrict_sr=&sort=relevance&t=all"
+  :keybinding "r")
+
+(defengine ncbi
+  "http://www.ncbi.nlm.nih.gov/gquery/?=gquery&term=%s"
+  :keybinding "n")
+#+END_SRC
+* Org mode
+** Core
+*** Default keybindings
+  #+BEGIN_SRC emacs-lisp
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cc" 'org-capture)
+  (global-set-key "\C-cb" 'org-iswitchb)
+  #+END_SRC
+** Customizations
+*** Capture templates
+  #+BEGIN_SRC emacs-lisp
+    (setq org-default-notes-file "~/Documents/notes.org")
+    (setq org-capture-templates
+           '(("g"  ; key
+              "Grad School"  ; title
+              entry  ; type
+              (file+headline "/home/zdm/UIC/Logistics/grad-school.org" "Misc") ; file location
+              "* TODO %?\n  %i\n")  ; template
+
+             ("l"
+              "Lab archive"
+              entry
+              (file+datetree "/home/zdm/Lab/Notebook/leow-lab.org")
+              "* %?\n  %i\n")
+
+             ("L"
+              "Lab logistics"
+              entry
+              (file+headline "/home/zdm/Lab/Notebook/leow-lab.org" "Logistics")
+              "* %?\n  %i\n")
+
+             ("p"
+              "Personal"
+              entry
+              (file+headline "/home/zdm/Documents/Personal/personal.org" "Miscellaneous")
+              "* TODO %?\n  %i\n")))
+  #+END_SRC
+*** Don't ask to confirm evaluation of source blocks
+ #+BEGIN_SRC emacs-lisp
+ (setq org-confirm-babel-evaluate nil)
+ #+END_SRC
+*** Org \LaTeX preview
+ #+BEGIN_SRC emacs-lisp
+   ;(setq org-preview-latex-default-process 'imagemagick)
+   ;(setq org-preview-latex-default-process 'dvipng)
+   (setq org-latex-create-formula-image-program 'imagemagick)
+ #+END_SRC
+*** TODO Org table swap cells
+ Swap individual cells in Org tables. Still in progress
+ #+BEGIN_SRC emacs-lisp
+ ;; Org-table swap cells; needs more work
+ ; Swap down
+ ;(defun my-org-swap-down ()               ; swap with value below
+ ;  (interactive)
+ ;  (let ((pos (point))                   ; get current positive
+ ;        (v1 (org-table-get-field)))     ; copy current field
+ ;    (org-table-blank-field)             ; blank current field
+ ;    (org-table-next-row)                ; move cursor down
+ ;    (let ((v2 (org-table-get-field)))   ; take copy of that field, too
+ ;      (org-table-blank-field)           ; blank that field too
+ ;      (insert v1)                       ; insert the value from above
+ ;      (goto-char pos)                   ; go to original location
+ ;      (insert v2)                       ; insert the value from below
+ ;      (org-table-align)                 ; realign the table
+ ;      (goto-char pos))))                ; move back to original position
+ ;
+ ;(global-set-key (kbd "\M-") 'my-org-swap-down) ; keybinding 
+
+ ; Swap up
+ ; Need a makeshift org-table-previous-row command, since there isn'to one by default
+ ;(defun org-table-previous-row () ; This function needs work
+ ;Go to the previous row (same column) in the current table.
+ ;Before doing so, re-align the table if necessary."
+ ;  (interactive)
+ ;  (if (and org-table-automatic-realign
+ ;	   org-table-may-need-update)
+ ;      (org-table-align)
+ ;    let ((col (org-table-current-column)))
+ ;    (forward-line -1)
+ ;    (when (or (not (org-at-table-p))
+ ;	    (org-at-table-hline-p))
+ ;	(progn
+ ;	  (beginning-of-line)))
+ ;    (org-table-goto-column col)
+ ;    (skip-chars-backward "^/\n\are")
+ ;    (when (org-looking-at " ") (forward-char))))
+ ;
+ ;(defun my-org-swap-up ()                ; swap with value above
+ ;  (interactive)
+ ;  (let ((pos (point))                   ; get current positive
+ ;        (v1 (org-table-get-field)))     ; copy current field
+ ;    (org-table-blank-field)             ; blank current field
+ ;    (forward-line -1)                   ; move cursor up 
+ ;    (let ((v2 (org-table-get-field)))   ; take copy of that field, too
+ ;      (org-table-blank-field)           ; blank that field too
+ ;      (insert v1)                       ; insert the value from above
+ ;      (goto-char pos)                   ; go to original location
+ ;      (insert v2)                       ; insert the value from above
+ ;      (org-table-align)                 ; realign the table
+ ;      (goto-char pos))))                ; move back to original position
+ ;(global-set-key (kbd "\M-") 'my-org-swap-up) ; keybinding
+
+ ; Swap right
+ ;(defun my-org-swap-right ()             ; swap with value to the right
+ ;  (interactive)
+ ;  (let ((pos (point))                   ; get current positive
+ ;        (v1 (org-table-get-field)))     ; copy current field
+ ;    (org-table-blank-field)             ; blank current field
+ ;    (org-table-next-field)              ; move cursor right
+ ;    (let ((v2 (org-table-get-field)))   ; take copy of that field, too
+ ;      (org-table-blank-field)           ; blank that field too
+ ;      (insert v1)                       ; insert the value from above
+ ;      (goto-char pos)                   ; go to original location
+ ;      (insert v2)                       ; insert the value from right
+ ;      (org-table-align)                 ; realign the table
+ ;      (goto-char pos))))                ; move back to original position
+ ;(global-set-key (kbd "\M-") 'my-org-swap-right) ;keybinding
+
+ ; Swap left
+ ;(defun my-org-swap-left ()               ; swap with value to the left
+ ;  (interactive)
+ ;  (let ((pos (point))                   ; get current positive
+ ;        (v1 (org-table-get-field)))     ; copy current field
+ ;    (org-table-blank-field)             ; blank current field
+ ;    (org-table-previous-field)          ; move cursor left
+ ;    (let ((v2 (org-table-get-field)))   ; take copy of that field, too
+ ;      (org-table-blank-field)           ; blank that field too
+ ;      (insert v1)                       ; insert the value from left
+ ;      (goto-char pos)                   ; go to original location
+ ;      (insert v2)                       ; insert the value from below
+ ;      (org-table-align)                 ; realign the table
+ ;      (goto-char pos))))                ; move back to original position
+ ;(global-set-key (kbd "\M-") 'my-org-swap-left) ; keybinding
+
+
+ #+END_SRC
+*** Org-ac
+#+BEGIN_SRC emacs-lisp
+(require 'org-ac)
+
+;; Make config suit for you. About the config item, eval the following sexp.
+;; (customize-group "org-ac")
+
+(org-ac/config-default)
+#+END_SRC
+*** Org-babel
+  #+BEGIN_SRC emacs-lisp
+    ;; Load languages
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((python . t)
+       (R . t)
+       (emacs-lisp . t)
+       (latex . t)
+       (matlab . t)
+       (js . t)
+       (css . t)
+       (sh . t)
+       (C . t)
+       (ledger . t)
+       ))
+
+    ;; Remove the need to confirm evaluation of each code block
+    (setq org-confirm-babel-evaluate nil)
+
+    ;; Customize default behavior of org-mode code blocks
+    ;; so that they can be used to display examples of
+    ;; org-mode syntax
+    ;(setf org-babel-default-header-args:org '((:exports . "code")))
+
+    ;; Source code syntax highlighting
+    (setq org-src-fontify-natively t)
+
+    ;; Source code syntax highlight for PDF export
+    (require 'ox-latex)
+    (add-to-list 'org-latex-packages-alist '("" "minted"))
+    (setq org-latex-listings 'minted)
+    (setq org-latex-minted-options
+          '(("frame" "lines") ("linenos=true")))
+
+    (setq org-latex-pdf-process
+          '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "bibtex %b"  ; for org-ref
+            "makeindex %b"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+            "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+    ;; Open source code buffer in other window
+    (setq org-src-window-setup 'other-window)
+  #+END_SRC
+*** Org-bookmark-heading
+Use to bookmark headings in org-mode
+#+BEGIN_SRC emacs-lisp
+(require 'org-bookmark-heading)
+#+END_SRC
+*** Org-bullets
+ Single bullets for Org-mode
+ #+BEGIN_SRC emacs-lisp
+
+    (require 'org-bullets)
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+    ;; Org-bullets symbol customization:
+   ; (setq org-bullets-face-name (quote org-bullet-face))
+   (setq org-bullets-bullet-list '("*" "*" "*" "*"))
+   ;; Default
+   ; (setq org-bullets-bullet-list '("◉" "○" "●" "✸"))
+ #+END_SRC
+**** Remove bullets
+  A cleaner option that removes bullets and instead uses spaces. Using different colors for each subheading makes it easy to identify subheadings quickly
+  #+BEGIN_SRC emacs-lisp
+  ;(setq org-bullets-bullet-list '("   " "   " "   " "   "))
+  #+END_SRC
+*** Org-crypt
+ For Org mode files, use this as the first line in the file:
+ =# -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*-=
+ #+BEGIN_SRC emacs-lisp
+ (require 'org-crypt)
+ (org-crypt-use-before-save-magic)
+ (setq org-tags-exclude-from-inheritance (quote ("crypt")))
+ (setq org-crypt-key nil)
+ ;; GPG key to use for encryption
+ ;; Either the Key ID or set to nil to use symmetric encryption.
+ (setq auto-save-default nil)
+ ;; Auto-saving does not cooperate with org-crypt.el: so you need
+ ;; to turn it off if you plan to use org-crypt.el quite often.
+ ;; Otherwise, you'll get an (annoying) message each time you
+ ;; start Org.
+ ;; To turn it off only locally, you can insert this:
+ ;;
+ ;; # -*- buffer-auto-save-file-name: nil; -*-
+
+ #+END_SRC
+*** Org-edit-latex
+#+BEGIN_SRC emacs-lisp
+(require 'org-edit-latex)
+#+END_SRC
+*** Org inline image preview
+Sets default inline image width smaller to view in frame
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-image-actual-width 400)
+#+END_SRC
+*** Org-ref
+**** Base setup
+  #+BEGIN_SRC emacs-lisp
+    ;(setq org-latex-pdf-process
+    ;      '("pdflatex -interaction nonstopmode -output-directory %o %f"
+    ;        "bibtex %b"
+    ;        "pdflatex -interaction nonstopmode -output-directory %o %f"
+    ;        "pdflatex -interaction nonstopmode -output-directory %o %f")
+    ;)
+
+    (require 'org-ref)
+    (require 'org-ref-wos)
+    (require 'org-ref-scopus)
+    (require 'org-ref-pubmed)
+    (require 'doi-utils)
+    (require 'org-ref-pdf)
+    (require 'org-ref-latex)
+    (require 'org-ref-url-utils)
+  #+END_SRC
+**** Directories
+ #+BEGIN_SRC emacs-lisp
+ (setq org-ref-notes-directory "~/Zotero/notes"
+       org-ref-bibliography-notes "~/Zotero/articles.org"
+       org-ref-default-bibliography '("~/Zotero/library.bib")
+       org-ref-pdf-directory "~/Zotero/articles")
+ #+END_SRC
+*** =TODO= keywords
+ Sets custom keywords for the todo items
+ #+BEGIN_SRC emacs-lisp
+ (setq org-todo-keywords
+         '((sequence "TODO" "STARTED" "WAITING" "|" "DONE" "DELEGATED")))
+
+ #+END_SRC
+*** Logging TODO items
+**** =C-c C-x C-s= to mark a todo as done and archive it
+#+BEGIN_SRC emacs-lisp
+(defun mark-done-and-archive ()
+  "Mark the state of an org-mode item as DONE and archive it."
+  (interactive)
+  (org-todo 'done)
+  (org-archive-subtree))
+
+(define-key org-mode-map (kbd "C-c C-x C-s") 'mark-done-and-archive)
+#+END_SRC
+**** Record the time that a todo was archived
+#+BEGIN_SRC emacs-lisp
+(setq org-log-done 'time)
+#+END_SRC
+*** Miscellaneous
+#+BEGIN_SRC emacs-lisp
+  ;; Put captions for tables above the table (APA style)
+  (setq org-latex-table-caption-above t)
+#+END_SRC
+* Encryption
+** EasyPG
+#+BEGIN_SRC emacs-lisp
+(require 'epa-file)
+(epa-file-enable)
+#+END_SRC
+** Password generator
+Courtesy of HRS
+#+BEGIN_SRC emacs-lisp
+(defun insert-random-string (len)
+  "Insert a random alphanumeric string of length len."
+  (interactive)
+  (let ((mycharset "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstyvwxyz!@#$%^&*"))
+    (dotimes (i len)
+      (insert (elt mycharset (random (length mycharset)))))))
+
+(defun generate-password ()
+  "Insert a good alphanumeric password of length 30."
+  (interactive)
+  (insert-random-string 30))
+#+END_SRC
+* Ledger mode
+#+BEGIN_SRC emacs-lisp
+  (use-package ledger-mode
+    :ensure t
+    :init
+    (setq ledger-clear-whole-transactions nil)
+
+    :config
+    (add-to-list 'evil-emacs-state-modes 'ledger-report-mode)
+    :mode "\\.dat\\'")
+#+END_SRC
+* Editing settings
+** Abbrev-mode
+To define a new abbrev:
+Type the word you want to use as expansion
+and then type C-x a g and the abbreviation for it.
+Example: t h e C-x a g t e h RET
+
+#+BEGIN_SRC emacs-lisp
+;; Global on (t, 1) or off (nil, -1):
+(setq-default abbrev-mode nil)
+
+;; Only on for Org-mode
+(add-hook 'org-mode-hook (lambda () (abbrev-mode t)))
+(abbrev-mode -1)
+
+;; Disable abbrev-mode in minibuffer
+(defun conditionally-disable-abbrev ()
+      (abbrev-mode -1))
+
+(add-hook 'minibuffer-setup-hook 'conditionally-disable-abbrev)
+
+
+#+END_SRC
+** Ace jump
+#+BEGIN_SRC emacs-lisp
+;;
+;; ace jump mode major function
+;; 
+(add-to-list 'load-path "~/.emacs.d/elpa/ace-jump-mode-20140616/ace-jump-mode.el")
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode"
+  "Emacs quick move minor mode"
+  t)
+;; you can select the key you prefer to
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+
+
+;; 
+;; enable a more powerful jump back function from ace jump mode
+;;
+(autoload
+  'ace-jump-mode-pop-mark
+  "ace-jump-mode"
+  "Ace jump back:-)"
+  t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+#+END_SRC
+** Anchored transpose
+Tranposes a selected region of text around a specified anchor point. Select entire region to be transposed, enter =C-x t=, then select anchor region to tranpose the two regions around, then enter =C-x t= again to complete transpose.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/elap/anchored-transpose-20080904.2254")
+(require 'anchored-transpose)
+(global-set-key [?\C-x ?t] 'anchored-transpose)
+(autoload 'anchored-transpose "anchored-transpose" nil t)
+#+END_SRC
+** Auto-complete
+#+BEGIN_SRC emacs-lisp
+(require 'auto-complete-config)
+(ac-config-default)
+
+; If you really like the menu to show immediately
+;(setq ac-show-menu-immediately-on-auto-complete t)
+#+END_SRC
+** Browse kill ring
+If using Evil mode, use =M-y= while in =Insert= mode
+#+BEGIN_SRC emacs-lisp
+(when (require 'browse-kill-ring nil 'noerror)
+  (browse-kill-ring-default-keybindings))
+; Now, the M-y key binding will activate browse-kill-ring iff the normal behavior (see above) is not available, i.e., when the last command was not a 'yank'. You can also edit the kill-ring (press C-h m when in the browse-kill-ring-buffer to see the available bindings). 
+
+
+#+END_SRC
+** Dired+
+#+BEGIN_SRC emacs-lisp
+  (diredp-toggle-find-file-reuse-dir t)
+#+END_SRC
+** Dired-X
+#+BEGIN_SRC emacs-lisp
+(require 'dired-x)
+(setq dired-omit-files "^\\...+$")
+(add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1))) ; M-o to toggle
+#+END_SRC
+** Helm
+#+BEGIN_SRC emacs-lisp
+  ;; 'M-x helm-M-x RET helm-' lists helm commands ready for narrowing and selecting.
+  ;; To bind to M-x:
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (require 'helm-config)
+  ;; For Helm-smex:
+  ;(require 'helm-smex)
+  ;(global-set-key [remap execute-extended-command] #'helm-smex)
+  ;(global-set-key (kbd "M-X") #'helm-smex-major-mode-commands)
+#+END_SRC
+
+#+RESULTS:
+: helm-config
+
+*** Helm-bibtex
+#+BEGIN_SRC emacs-lisp
+(setq helm-bibtex-bibliography "~/Zotero/library.bib"
+      helm-bibtex-library-path "~/Zotero/articles"
+      helm-bibtex-notes-path "~/Zotero/articles.org")
+(setq  helm-bibtex-pdf-field "file")
+#+END_SRC
+*** Helm-projectile
+#+BEGIN_SRC emacs-lisp
+;; (setq helm-projectile-fuzzy-match nil)
+(require 'helm-projectile)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+#+END_SRC
+** Ibuffer
+Used to manage buffers more easily
+#+BEGIN_SRC emacs-lisp
+(setq ibuffer-default-sorting-mode 'major-mode)
+#+END_SRC
+** Ido
+#+BEGIN_SRC emacs-lisp
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+;; Have ido ignore any buffers when switching that begin with space or *
+(setq ido-ignore-buffers '("\\` " "^\*"))
+
+;; Use ido for org file completion
+(setq org-completion-use-ido t)
+#+END_SRC
+** Macros
+Begin macro: =f3= or =C-x (=
+End macro: =f4= or =C-x )=
+Name macro: =M-x name-last-kbd-macro=
+Paste macro into .emacs: =M-x insert-kbd-macro RET <macro-name> RET=
+*** In Org-mode, *bold* word at point
+#+BEGIN_SRC emacs-lisp
+(fset 'evil-org-bold-word
+   [?i ?* escape ?e ?a ?* escape ?B])
+#+END_SRC
+*** In Org-mode, /emph/ word at point
+#+BEGIN_SRC emacs-lisp
+(fset 'evil-org-emph-word
+   [?i ?/ escape ?e ?a ?/ escape ?B])
+#+END_SRC
+*** Org-ref search and sort citations
+#+BEGIN_SRC emacs-lisp
+(fset 'org-ref-search-sort-citations
+   [?/ ?c ?i ?t ?e ?: return ?  ?s ?n])
+
+#+END_SRC
+*** Org-mode, =verbatim= word at point
+#+BEGIN_SRC emacs-lisp
+(fset 'evil-org-verbatim-word
+   [?i ?= escape ?E ?a ?= escape ?B])
+#+END_SRC
+*** Org-mode, begin source emacs-lisp
+#+BEGIN_SRC emacs-lisp
+(fset 'begin-src-emacs-lisp
+   [?i ?< ?s tab ?e ?m ?a ?c ?s ?- ?l ?i ?s ?p escape ?0 ?j ?i])
+
+#+END_SRC
+*** Org-checkboxify
+Convert plain list to checkboxes. Call with C-u prefix for # of lines
+#+BEGIN_SRC emacs-lisp
+(fset 'org-checkboxify
+   [?i ?- ?  ?\[ ?  ?\C-f ?  escape ?F ?- ?j])
+#+END_SRC
+** Make kill ring and OS X clipboard separate
+#+BEGIN_SRC emacs-lisp
+(setq save-interprogram-paste-before-kill t)
+#+END_SRC
+** ODT to Word conversion
+#+BEGIN_SRC emacs-lisp
+;; Convert org-file to .odt to Word doc
+
+(setq org-odt-preferred-output-format "doc")
+; BTW, you can assign "pdf" in above variables if you prefer PDF format
+
+; Only OSX need below setup
+(defun my-setup-odt-org-convert-process ()
+  (interactive)
+  (let ((cmd "/Applications/LibreOffice.app/Contents/MacOS/soffice"))
+    (when (and (eq system-type 'darwin) (file-exists-p cmd))
+      (setq org-odt-convert-processes '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i"))))
+   )) 
+(my-setup-odt-org-convert-process)
+
+#+END_SRC
+** Palimpsest mode
+Enter keybinding to move selected text to the bottom of the current buffer. Useful for text that you don't need but don't want to delete yet.
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/elpa/palimpsest-20130731.821")
+;(require 'palimpsest)
+;(add-hook 'text-mode-hook 'palimpsest-mode)
+#+END_SRC
+** Pdf-tools + Interleave
+Install epdfinfo via =brew install pdf-tools= and then install the pdf-tools elisp via the use-package below. To upgrade the epdfinfo server, just do =brew upgrade pdf-tools= prior to upgrading to newest pdf-tools package using Emacs package system. If things get messed up, just do =brew uninstall pdf-tools=, wipe out the elpa pdf-tools package and reinstall both as at the start.
+#+BEGIN_SRC emacs-lisp
+;(use-package pdf-tools
+;  :ensure to
+;  :config
+  ;(custom-set-variables
+  ;  '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+  ;(setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+(pdf-tools-install)
+
+; See page numbers in pdf-tools buffer
+;(define-pdf-cache-function pagelabels)
+;
+;(add-hook 'pdf-view-mode-hook
+;          (lambda ()
+;            (setq-local mode-line-position
+;                        '(" ["
+;                          (:eval (nth (1- (pdf-view-current-page))
+;                                      (pdf-cache-pagelabels)))
+;                          "/"
+;                          (:eval (number-to-string (pdf-view-current-page)))
+;                          "/"
+;                          (:eval (number-to-string (pdf-cache-number-of-pages)))
+;                          "]"))))
+
+
+;; Interleave (needs to be laoded after pdf-tools to work properly)
+(package-initialize)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+
+(package-install 'interleave)
+(require 'interleave)
+#+END_SRC
+** Ranger
+Alternative to Dired and uses vim-like keybindings. 
+#+BEGIN_SRC emacs-lisp
+; Hide dotfiles by default
+(setq ranger-show-dotfiles nil)
+#+END_SRC
+** Root permissions
+#+BEGIN_SRC emacs-lisp
+  (defun sudo-edit (&optional arg)
+    "Edit currently visited file as root.
+
+  With a prefix ARG prompt for a file to visit.
+  Will also prompt for a file to visit if current
+  buffer is not visiting a file."
+    (interactive "P")
+    (if (or arg (not buffer-file-name))
+        (find-file (concat "/sudo:root@localhost:"
+                           (ido-read-file-name "Find file(as root): ")))
+      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+#+END_SRC
+** Set yes/no prompts to just y/n
+#+BEGIN_SRC emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+** Spaces after periods
+Set sentences to be a period (full-stop) followed by one space
+#+BEGIN_SRC emacs-lisp
+(setq sentence-end-double-space nil)
+#+END_SRC
+** Spellcheck
+Use =flyspell= for spellchecking
+
+# Add hook to be only active in certain modes?
+
+#+BEGIN_SRC emacs-lisp
+(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+#+END_SRC
+** Temporary files
+Allocates all temporary files to a 'backup' directory
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist '(("." . "~/Documents/Emacs-temp-files"))
+  backup-by-copying t    ; Don't delink hardlinks
+  version-control t      ; Use version numbers on backups
+  delete-old-versions t  ; Automatically delete excess backups
+  kept-new-versions 20   ; how many of the newest versions to keep
+  kept-old-versions 5    ; and how many of the old
+  )
+
+#+END_SRC
+** Wind move
+Keybindings to more easily switch windows than default =C-x o=. I now predominantly use Evil-leader custom keybindings for switching between windows and frames since I switched to mostly using Evil mode. 
+#+BEGIN_SRC emacs-lisp
+(when (fboundp 'windmove-default-keybindings)
+(windmove-default-keybindings))
+(global-set-key (kbd "s-<left>")  'windmove-left)
+(global-set-key (kbd "s-<right>") 'windmove-right)
+(global-set-key (kbd "s-<up>")    'windmove-up)
+(global-set-key (kbd "s-<down>")  'windmove-down)
+
+; *N.B.* s = super, S = shift
+#+END_SRC
+** Yasnippet
+Used for autocompletion of templates (similar to abbrev-mode, but for programming)
+#+BEGIN_SRC emacs-lisp
+  ;;(add-to-list 'load-path
+  ;;                "/Users/Zach/.emacs.d/elpa/yasnippet-0.10.0")
+  ;;   (require 'yasnippet)
+  (yas-global-mode 1)
+#+END_SRC
+* Custom keybindings
+** Frequently used files
+#+BEGIN_SRC emacs-lisp
+;;(global-set-key (kbd "<f5> a") (lambda () (interactive) (find-file "~/Zotero/articles.org")))
+;;(global-set-key (kbd "<f5> c") (lambda () (interactive) (find-file "~/.emacs.d/config.org")))
+;;(global-set-key (kbd "<f5> e") (lambda () (interactive) (find-file "~/.emacs")))
+;;(global-set-key (kbd "<f5> g") (lambda () (interactive) (find-file "~/Documents/Org/Grad School/Grad school.org")))
+;;(global-set-key (kbd "<f5> l") (lambda () (interactive) (find-file "~/Documents/Billing/Ledger/ZDM-chase.dat.gpg")))
+;;(global-set-key (kbd "<f5> m") (lambda () (interactive) (find-file "~/Documents/Writing/Books/motsdepasse.txt.gpg")))
+;;(global-set-key (kbd "<f5> n") (lambda () (interactive) (find-file "~/Leow Lab/Notebook/leow-lab.org")))
+;;(global-set-key (kbd "<f5> p") (lambda () (interactive) (find-file "~/Documents/Org/Personal/personal.org")))
+;;(global-set-key (kbd "<f5> z") (lambda () (interactive) (find-file "~/Zotero/library.bib")))
+#+END_SRC
+** Greek letters
+Enter Greek letters directly into buffer. Sometimes useful in org instead of \LaTeX commands
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "M-g a") "α")
+(global-set-key (kbd "M-g b") "β")
+(global-set-key (kbd "M-g g") "γ")
+(global-set-key (kbd "M-g d") "δ")
+(global-set-key (kbd "M-g e") "ε")
+(global-set-key (kbd "M-g z") "ζ")
+(global-set-key (kbd "M-g h") "η")
+(global-set-key (kbd "M-g q") "θ")
+(global-set-key (kbd "M-g i") "ι")
+(global-set-key (kbd "M-g k") "κ")
+(global-set-key (kbd "M-g l") "λ")
+(global-set-key (kbd "M-g m") "μ")
+(global-set-key (kbd "M-g n") "ν")
+(global-set-key (kbd "M-g x") "ξ")
+(global-set-key (kbd "M-g o") "ο")
+(global-set-key (kbd "M-g p") "π")
+(global-set-key (kbd "M-g r") "ρ")
+(global-set-key (kbd "M-g s") "σ")
+(global-set-key (kbd "M-g t") "τ")
+(global-set-key (kbd "M-g u") "υ")
+(global-set-key (kbd "M-g f") "ϕ")
+(global-set-key (kbd "M-g j") "φ")
+(global-set-key (kbd "M-g c") "χ")
+(global-set-key (kbd "M-g y") "ψ")
+(global-set-key (kbd "M-g w") "ω")
+(global-set-key (kbd "M-g A") "Α")
+(global-set-key (kbd "M-g B") "Β")
+(global-set-key (kbd "M-g G") "Γ")
+(global-set-key (kbd "M-g D") "Δ")
+(global-set-key (kbd "M-g E") "Ε")
+(global-set-key (kbd "M-g Z") "Ζ")
+(global-set-key (kbd "M-g H") "Η")
+(global-set-key (kbd "M-g Q") "Θ")
+(global-set-key (kbd "M-g I") "Ι")
+(global-set-key (kbd "M-g K") "Κ")
+(global-set-key (kbd "M-g L") "Λ")
+(global-set-key (kbd "M-g M") "Μ")
+(global-set-key (kbd "M-g N") "Ν")
+(global-set-key (kbd "M-g X") "Ξ")
+(global-set-key (kbd "M-g O") "Ο")
+(global-set-key (kbd "M-g P") "Π")
+(global-set-key (kbd "M-g R") "Ρ")
+(global-set-key (kbd "M-g S") "Σ")
+(global-set-key (kbd "M-g T") "Τ")
+(global-set-key (kbd "M-g U") "Υ")
+(global-set-key (kbd "M-g F") "Φ")
+(global-set-key (kbd "M-g J") "Φ")
+(global-set-key (kbd "M-g C") "Χ")
+(global-set-key (kbd "M-g Y") "Ψ")
+(global-set-key (kbd "M-g W") "Ω")
+#+END_SRC
+
