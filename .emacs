@@ -156,6 +156,8 @@
   :ensure t)
 (use-package rainbow-delimiters
   :ensure t)
+(use-package realgud
+  :ensure t)
 (use-package smartparens
   :ensure t
   :init
@@ -250,7 +252,7 @@
  '(org-fontify-whole-heading-line t)
  '(package-selected-packages
    (quote
-    (writeroom-mode ox-reveal git-gutter-fringe minimap neotree solarized-theme zenburn-theme magit dictionary helm-dictionary discover elpy yasnippet which-key use-package smartparens rainbow-delimiters pyvenv org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac nlinum matlab-mode ledger-mode interleave highlight-indentation helm-projectile go gnugo git-commit frame-cmds find-file-in-project exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode doom-themes dired+ diminish diff-hl csv-mode company browse-kill-ring anchored-transpose ac-js2)))
+    (realgud writeroom-mode ox-reveal git-gutter-fringe minimap neotree solarized-theme zenburn-theme magit dictionary helm-dictionary discover elpy yasnippet which-key use-package smartparens rainbow-delimiters pyvenv org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac nlinum matlab-mode ledger-mode interleave highlight-indentation helm-projectile go gnugo git-commit frame-cmds find-file-in-project exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode doom-themes dired+ diminish diff-hl csv-mode company browse-kill-ring anchored-transpose ac-js2)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")

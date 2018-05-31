@@ -535,7 +535,7 @@ Some custom evil-leader keymaps that I frequently use
     "a" 'org-agenda
     "b" 'helm-buffers-list ; for ido-mode: 'switch-to-buffer
     "c" 'ledger-mode-clean-buffer
-    "d" 'evil-org-bold-word
+    "d" 'zdm-org-bold
     "e" 'helm-find-files ; for ido-mode: 'find-file
     "f" 'other-frame
     "g" 'magit-status
@@ -550,6 +550,7 @@ Some custom evil-leader keymaps that I frequently use
     "r" 'helm-multi-files
     "s" 'org-ref-sort-citation-link
     "t" 'neotree-toggle
+    "u" 'zdm-org-underline
     "v" 'split-window-right
     "w" 'other-window
     "x" 'mark-done-and-archive)
@@ -947,6 +948,28 @@ Sets default inline image width smaller to view in frame
 #+BEGIN_SRC emacs-lisp
   ;; Put captions for tables above the table (APA style)
   (setq org-latex-table-caption-above t)
+
+  ;; Custom org-mode functions
+
+  (defun zdm-org-underline ()
+    "Underline word in org mode."
+    (interactive)
+    (save-excursion
+      (skip-chars-backward "-_[:alnum:]")
+      (insert "_")
+      (skip-chars-forward "_[:alnum:]")
+      (insert "_")))
+
+  (defun zdm-org-bold ()
+    "Bold word in org mode."
+    (interactive)
+    (save-excursion
+      (skip-chars-backward "-_[:alnum:]")
+      (insert "*")
+      (skip-chars-forward "_[:alnum:]")
+      (insert "*")))
+
+
 #+END_SRC
 * Encryption
 ** EasyPG
