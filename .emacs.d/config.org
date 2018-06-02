@@ -555,8 +555,8 @@ Some custom evil-leader keymaps that I frequently use
     "u" 'zdm-org-underline
     "v" 'split-window-right
     "w" 'other-window
-    "x" 'mark-done-and-archive)
-    "y" 'helm-show-kill-ring
+    "x" 'mark-done-and-archive
+    "y" 'helm-show-kill-ring)
 #+END_SRC
 ** Evil
 Default state is vim =<N>=, to make it emacs =<E>=, turn on =(setq evil-default-state 'emacs')=
