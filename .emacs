@@ -78,6 +78,8 @@
   (defun my/org-mode-hook ()
     (set-face-attribute 'org-level-1 nil :height 1.0 :background nil))
   (add-hook 'org-load-hook #'my/org-mode-hook))        
+(use-package ein
+  :ensure t)
 (use-package elpy
   :ensure t
   :mode ("\\.py\\'" . python-mode))
@@ -121,14 +123,14 @@
   :ensure t)           
 (use-package helm
   :ensure helm-core)
-;(use-package helm-core)
-;  :ensure t)
 (use-package helm-bibtex
   :ensure t
   :commands helm-bibtex)
 (use-package helm-dictionary
   :ensure t)
 (use-package helm-projectile
+  :ensure t)
+(use-package helm-swoop
   :ensure t)
 (use-package interleave
   :ensure t)
@@ -252,7 +254,7 @@
  '(org-fontify-whole-heading-line t)
  '(package-selected-packages
    (quote
-    (realgud writeroom-mode ox-reveal git-gutter-fringe minimap neotree solarized-theme zenburn-theme magit dictionary helm-dictionary discover elpy yasnippet which-key use-package smartparens rainbow-delimiters pyvenv org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac nlinum matlab-mode ledger-mode interleave highlight-indentation helm-projectile go gnugo git-commit frame-cmds find-file-in-project exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode doom-themes dired+ diminish diff-hl csv-mode company browse-kill-ring anchored-transpose ac-js2)))
+    (helm-migemo helm-swoop ein realgud writeroom-mode ox-reveal git-gutter-fringe minimap neotree solarized-theme zenburn-theme magit dictionary helm-dictionary discover elpy yasnippet which-key use-package smartparens rainbow-delimiters pyvenv org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac nlinum matlab-mode ledger-mode interleave highlight-indentation helm-projectile go gnugo git-commit frame-cmds find-file-in-project exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode doom-themes dired+ diminish diff-hl csv-mode company browse-kill-ring anchored-transpose ac-js2)))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(pos-tip-background-color "#eee8d5")
  '(pos-tip-foreground-color "#586e75")
@@ -297,7 +299,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
+ '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Ubuntu Mono"))))
  '(cursor ((t (:background "turquoise1"))))
  '(fringe ((t (:inherit default))))
  '(linum ((t (:inherit default))))
