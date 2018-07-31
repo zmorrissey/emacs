@@ -1,6 +1,6 @@
 #+TITLE: Emacs configuration
-#+DATE: 
-#+AUTHOR: Zachery D. Morrissey 
+#+DATE:
+#+AUTHOR: Zachery D. Morrissey
 #+STARTUP: indent
 
 * Add resources to load path
@@ -39,7 +39,7 @@ For custom-made functions
   ;If regexp search match "cite:" is true,
   ;goto next occurrence and execute org-ref command
   ;
-  ;else, 
+  ;else,
   ;return to push-mark
 
 #+END_SRC
@@ -88,7 +88,7 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
     (interactive "P")
     (condition-case nil
 	(fix-window-horizontal-size width)
-      (error 
+      (error
        (condition-case nil
 	   (fix-frame-horizontal-size width)
 	 (error
@@ -99,7 +99,7 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
   ;; Shortcut to maximize frame width to screen
   (defun calc-max-frame-width ()
       (/ (- (x-display-pixel-width) 18) (frame-char-width)))
-      
+
   (defun maximize-frame-width ()
     (interactive)
     (if window-system
@@ -135,17 +135,17 @@ When creating new frames, respect default font settings
 ;      ;; from the screen height (for panels, menubars and
 ;      ;; whatnot), then divide by the height of a char to
 ;      ;; get the height we want
-;      (add-to-list 'default-frame-alist 
+;      (add-to-list 'default-frame-alist
 ;	   (cons 'height (/ (- (x-display-pixel-height) 200)
 ;			       (frame-char-height)))))))
 ;
 ;  (set-frame-size-according-to-resolution)
- 
+
   ;; Set frame size using maxframe.el
   ;(require 'maxframe')
   ;; Set max width to 80px
   ;(setq mf-max-width 80)
-  ;(add-hook 'window-setup-hook 'maximize-frame t) 
+  ;(add-hook 'window-setup-hook 'maximize-frame t)
 #+END_SRC
 ** Fringe
 Change fringe settings
@@ -167,6 +167,11 @@ Change fringe settings
 ** Highlight matching parantheses
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
+#+END_SRC
+** Menu bar
+#+BEGIN_SRC emacs-lisp
+  ;; Turn off menu bar by default
+  (setq menu-bar-mode nil)
 #+END_SRC
 ** Minimap
 #+BEGIN_SRC emacs-lisp
@@ -205,7 +210,7 @@ Change fringe settings
                                   :foundry "nil"
                                   :family "Ubuntu Mono"))))
            )
-           
+
 #+END_SRC
 ** Neotree
 #+BEGIN_SRC emacs-lisp
@@ -247,9 +252,9 @@ Another line number mode (I think?)
   ;; (define-globalized-minor-mode my-global-linum-relative-mode linum-relative-mode
   ;;   (lambda ()
   ;;     (unless (or (minibufferp)
-  ;;                 (derived-mode-p 
+  ;;                 (derived-mode-p
   ;;                   'doc-view-mode
-  ;;                   'shell-mode 
+  ;;                   'shell-mode
   ;;                   'org-mode
   ;;                   'org-agenda
   ;;                 )
@@ -259,7 +264,7 @@ Another line number mode (I think?)
 ;;  (defun my-linum-relative-mode-hook ()
 ;;    (linum-relative-mode 1))
 ;;  (add-hook 'prog-mode-hook 'my-linum-relative-mode-hook)
-  
+
 #+END_SRC
 ** Scrolling
 #+BEGIN_SRC emacs-lisp
@@ -330,7 +335,7 @@ I prefer to use a slightly customized version of the =doom-one theme=.
 #+BEGIN_SRC emacs-lisp
 (setq ring-bell-function 'ignore)
 #+END_SRC
-** Visual line mode 
+** Visual line mode
 Does not wrap words at end of line
  #+BEGIN_SRC emacs-lisp
  (global-visual-line-mode 1)
@@ -353,12 +358,12 @@ Automatically make shell scripts executable upon save.
 ** C
 *** Cc-mode
     #+BEGIN_SRC emacs-lisp
-    
+
 (add-to-list 'load-path "~/.emacs.d/elpa/cc-mode-5.33")
-    
+
     #+END_SRC
 ** Debugger
-C/C++ 
+C/C++
 #+BEGIN_SRC emacs-lisp
 (setq gdb-command-name "/usr/local/bin/gdb")
 #+END_SRC
@@ -368,6 +373,7 @@ Python
   (setenv "PATH" (concat"/Library/Frameworks/Python.framework/Versions/3.4/bin/pdb" (getenv "PATH")))
   (setq exec-path (split-string (getenv "PATH") path-separator))
   ;;(setq pdb-command-name "/Library/Frameworks/Python.framework/Versions/3.4/bin/pdb")
+  (setq realgud:pdb-command-name "python3 -m pdb")
 #+END_SRC
 ** Javascript
 *** js2
@@ -422,18 +428,23 @@ Python
 (projectile-mode)
 #+END_SRC
 ** Python
-*** Python 3 compatibility
+*** Python 3 compatibility and Elpy
 #+BEGIN_SRC emacs-lisp
-(package-initialize)
-(elpy-enable)
+  (package-initialize)
+  (elpy-enable)
 
-;; Use python 3 as shell interpreter
-(setq elpy-rpc-python-command "python3")
-(setq python-shell-interpreter "python3")
+  ;; Use python 3
+  (setq elpy-rpc-python-command "python3")
+  ;(setq python-shell-interpreter "python3")
+  (setq python-shell-interpreter "ipython3"
+        python-shell-interpreter-args "-i --simple-prompt")
 
 
-;; PDB
-(setq gud-pdb-command-name "python3 -m pdb")
+  ;; PDB
+  (setq gud-pdb-command-name "python3 -m pdb")
+
+  ;; Bind return to indent for docstrings
+  ;(define-key elpy-mode-map (kbd "<return>") 'elpy-open-and-indent-line-below)
 #+END_SRC
 *** Anaconda mode
 Code navigation, documentation lookup and completion for Python
@@ -449,6 +460,20 @@ Code navigation, documentation lookup and completion for Python
 
 #+BEGIN_SRC emacs-lisp
 ;(add-hook 'python-mode-hook 'anaconda-mode)
+#+END_SRC
+*** Delete trailing whitespace when saving file
+#+BEGIN_SRC emacs-lisp
+  ;; Before save
+  (add-hook 'before-save-hook
+            (lambda ()
+              (when 'elpy-mode
+                (delete-trailing-whitespace))))
+
+#+END_SRC
+*** Code folding
+#+BEGIN_SRC emacs-lisp
+  ;; Fold code with hs-minor-mode
+  (add-hook 'elpy-mode-hook 'hs-minor-mode)
 #+END_SRC
 ** R
 ESS: Emacs Speaks Statistics for working with R in Emacs
@@ -511,7 +536,7 @@ Leader key default is =\=. =,= is also popular, but I prefer using the =space ba
 #+BEGIN_SRC emacs-lisp
 (evil-leader/set-leader "<SPC>")
 ; (evil-leader/set-leader ",")
-#+END_SRC 
+#+END_SRC
 ** Leader keymaps
 Some custom evil-leader keymaps that I frequently use
 #+BEGIN_SRC emacs-lisp
@@ -529,9 +554,12 @@ Some custom evil-leader keymaps that I frequently use
   ;; A-Z
     "B" 'ibuffer
     "E" 'sudo-edit
+    "H" 'hs-toggle-hiding
     "I" 'ess-indent-command
     "M" 'helm-bookmarks
+    "S" 'delete-trailing-whitespace
     "T" 'helm-top
+    "V" 'interleave-mode
     "W" 'helm-man-woman
   ;; a-z
     "a" 'org-agenda
@@ -580,6 +608,15 @@ Default state is vim =<N>=, to make it emacs =<E>=, turn on =(setq evil-default-
   (evil-set-initial-state 'neotree-mode 'emacs)
 
 #+END_SRC
+
+Make evil-mode insert state act like native Emacs
+
+#+BEGIN_SRC emacs-lisp
+  ; redefine emacs state to intercept the escape key like insert-state does:
+  (setq evil-insert-state-map (make-sparse-keymap))
+  (define-key evil-insert-state-map (kbd "C-[") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
+#+END_SRC
 ** Evil-org
 Uses evil-like keybindings for Org-mode
 #+BEGIN_SRC emacs-lisp
@@ -605,7 +642,7 @@ A surround pair is this (trigger char with textual left and right strings):
  #+BEGIN_SRC emacs-lisp
  (require 'evil-surround)
  (global-evil-surround-mode 1)
- 
+
 
 ;; Fix extra space added when using delimiters
 ;; use non-spaced pairs when surrounding with an opening brace
@@ -621,39 +658,43 @@ A surround pair is this (trigger char with textual left and right strings):
 * Engine mode
 Use =C-x /= prefix followed by assigned keybinding to call
 #+BEGIN_SRC emacs-lisp
-(require 'engine-mode)
-(engine-mode t)
+  (require 'engine-mode)
+  (engine-mode t)
 
-(defengine github
-  "https://github.com/search?ref=simplesearch&q=%s"
-  :keybinding "g")
+  (defengine github
+    "https://github.com/search?ref=simplesearch&q=%s"
+    :keybinding "g")
 
-(defengine duckduckgo
-  "https://duckduckgo.com/?q=%s"
-  :keybinding "d")
+  (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
 
-(defengine amazon
-  "http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s"
-  :keybinding "a")
+  (defengine amazon
+    "http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s"
+    :keybinding "a")
 
-(defengine google-maps
-  "http://maps.google.com/maps?q=%s")
+  (defengine google-maps
+    "http://maps.google.com/maps?q=%s")
 
-(defengine wikipedia
-  "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
-  :keybinding "w")
+  (defengine wikipedia
+    "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+    :keybinding "w")
 
-(defengine youtube
-  "http://www.youtube.com/results?aq=f&oq=&search_query=%s"
-  :keybinding "y")
+  (defengine youtube
+    "http://www.youtube.com/results?aq=f&oq=&search_query=%s"
+    :keybinding "y")
 
-(defengine reddit
-  "https://www.reddit.com/search?q=%s&restrict_sr=&sort=relevance&t=all"
-  :keybinding "r")
+  (defengine reddit
+    "https://www.reddit.com/search?q=%s&restrict_sr=&sort=relevance&t=all"
+    :keybinding "r")
 
-(defengine ncbi
-  "http://www.ncbi.nlm.nih.gov/gquery/?=gquery&term=%s"
-  :keybinding "n")
+  (defengine ncbi
+    "http://www.ncbi.nlm.nih.gov/gquery/?=gquery&term=%s"
+    :keybinding "n")
+
+  (defengine scholar
+    "https://scholar.google.com/scholar?q=%s"
+    :keybinding "s")
 #+END_SRC
 * Org mode
 ** Core
@@ -722,7 +763,7 @@ Use =C-x /= prefix followed by assigned keybinding to call
  ;      (org-table-align)                 ; realign the table
  ;      (goto-char pos))))                ; move back to original position
  ;
- ;(global-set-key (kbd "\M-") 'my-org-swap-down) ; keybinding 
+ ;(global-set-key (kbd "\M-") 'my-org-swap-down) ; keybinding
 
  ; Swap up
  ; Need a makeshift org-table-previous-row command, since there isn'to one by default
@@ -748,7 +789,7 @@ Use =C-x /= prefix followed by assigned keybinding to call
  ;  (let ((pos (point))                   ; get current positive
  ;        (v1 (org-table-get-field)))     ; copy current field
  ;    (org-table-blank-field)             ; blank current field
- ;    (forward-line -1)                   ; move cursor up 
+ ;    (forward-line -1)                   ; move cursor up
  ;    (let ((v2 (org-table-get-field)))   ; take copy of that field, too
  ;      (org-table-blank-field)           ; blank that field too
  ;      (insert v1)                       ; insert the value from above
@@ -816,6 +857,7 @@ Use =C-x /= prefix followed by assigned keybinding to call
        (sh . t)
        (C . t)
        (ledger . t)
+       (ipython . t)
        ))
 
     ;; Remove the need to confirm evaluation of each code block
@@ -845,6 +887,17 @@ Use =C-x /= prefix followed by assigned keybinding to call
 
     ;; Open source code buffer in other window
     (setq org-src-window-setup 'other-window)
+
+    ;; Disable src block evaluation on export
+    (setq org-export-babel-evaluate nil)
+
+    ;; Set ipython minted same as pythong
+    (add-to-list 'org-latex-minted-langs '(ipython "python"))
+
+
+    ;; Custom ox-ipynb (John Kitchin)
+    (setq ox-ipynb "/home/zdm/Programming/Emacs/Elisp/ox-ipynb.el")
+    (require 'ox-ipynb)
   #+END_SRC
 *** Org-bookmark-heading
 Use to bookmark headings in org-mode
@@ -920,11 +973,35 @@ Sets default inline image width smaller to view in frame
   #+END_SRC
 **** Directories
  #+BEGIN_SRC emacs-lisp
- (setq org-ref-notes-directory "~/Zotero/notes"
+ (setq org-ref-notes-directory "~/Zotero/notes/"
        org-ref-bibliography-notes "~/Zotero/articles.org"
        org-ref-default-bibliography '("~/Zotero/library.bib")
-       org-ref-pdf-directory "~/Zotero/articles")
+       org-ref-pdf-directory "~/Zotero/articles/")
  #+END_SRC
+**** Customizations
+#+BEGIN_SRC emacs-lisp
+  ;; Custom org-ref-note-title-format for interleaving pdf
+  (setq org-ref-note-title-format
+  "** TODO %y - %t
+  :PROPERTIES:
+      :Custom_ID: %k
+      :AUTHOR: %9a
+      :JOURNAL: %j
+      :YEAR: %y
+      :VOLUME: %v
+      :PAGES: %p
+      :DOI: %D
+      :URL: %U
+      :INTERLEAVE_PDF: /home/zdm/Zotero/archive/
+     :END:
+
+    ")
+  ; Set hook to nil to allow for custom org-ref-note-title-format
+  (setq org-ref-create-notes-hook nil)
+
+  ;; Disable showing broken links to improve speed
+  (setq org-ref-show-broken-links nil)
+#+END_SRC
 *** =TODO= keywords
  Sets custom keywords for the todo items
  #+BEGIN_SRC emacs-lisp
@@ -1033,7 +1110,7 @@ Example: t h e C-x a g t e h RET
 #+BEGIN_SRC emacs-lisp
 ;;
 ;; ace jump mode major function
-;; 
+;;
 (add-to-list 'load-path "~/.emacs.d/elpa/ace-jump-mode-20140616/ace-jump-mode.el")
 (autoload
   'ace-jump-mode
@@ -1045,7 +1122,7 @@ Example: t h e C-x a g t e h RET
 
 
 
-;; 
+;;
 ;; enable a more powerful jump back function from ace jump mode
 ;;
 (autoload
@@ -1067,18 +1144,29 @@ Tranposes a selected region of text around a specified anchor point. Select enti
 #+END_SRC
 ** Auto-complete
 #+BEGIN_SRC emacs-lisp
-(require 'auto-complete-config)
-(ac-config-default)
+  (require 'auto-complete-config)
+  (ac-config-default)
 
-; If you really like the menu to show immediately
-;(setq ac-show-menu-immediately-on-auto-complete t)
+  ;; Disable auto-complete-mode for python-mode so it does not conflict
+  ;; with elpy
+  (defadvice auto-complete-mode (around disable-auto-complete-for-python)
+    (unless (eq major-mode 'python-mode) ad-do-it))
+
+  (ad-activate 'auto-complete-mode)
+
+
+  ;; Turn auto-complete mode off for certain modes
+  ; find way to make list of mode hooks
+  (add-hook 'elpy-mode-hook (lambda () (auto-complete-mode nil)))
+  ; If you really like the menu to show immediately
+  ;(setq ac-show-menu-immediately-on-auto-complete t)
 #+END_SRC
 ** Browse kill ring
 If using Evil mode, use =M-y= while in =Insert= mode
 #+BEGIN_SRC emacs-lisp
 (when (require 'browse-kill-ring nil 'noerror)
   (browse-kill-ring-default-keybindings))
-; Now, the M-y key binding will activate browse-kill-ring iff the normal behavior (see above) is not available, i.e., when the last command was not a 'yank'. You can also edit the kill-ring (press C-h m when in the browse-kill-ring-buffer to see the available bindings). 
+; Now, the M-y key binding will activate browse-kill-ring iff the normal behavior (see above) is not available, i.e., when the last command was not a 'yank'. You can also edit the kill-ring (press C-h m when in the browse-kill-ring-buffer to see the available bindings).
 
 
 #+END_SRC
@@ -1186,7 +1274,7 @@ Used to manage buffers more easily
   ; (ido-mode 1)
   ; ;; Have ido ignore any buffers when switching that begin with space or *
   ; (setq ido-ignore-buffers '("\\` " "^\*"))
-  ; 
+  ;
   ; ;; Use ido for org file completion
   ; (setq org-completion-use-ido t)
 #+END_SRC
@@ -1245,7 +1333,7 @@ Convert plain list to checkboxes. Call with C-u prefix for # of lines
   (let ((cmd "/Applications/LibreOffice.app/Contents/MacOS/soffice"))
     (when (and (eq system-type 'darwin) (file-exists-p cmd))
       (setq org-odt-convert-processes '(("LibreOffice" "/Applications/LibreOffice.app/Contents/MacOS/soffice --headless --convert-to %f%x --outdir %d %i"))))
-   )) 
+   ))
 (my-setup-odt-org-convert-process)
 
 #+END_SRC
@@ -1292,7 +1380,7 @@ Install epdfinfo via =brew install pdf-tools= and then install the pdf-tools eli
 (require 'interleave)
 #+END_SRC
 ** Ranger
-Alternative to Dired and uses vim-like keybindings. 
+Alternative to Dired and uses vim-like keybindings.
 #+BEGIN_SRC emacs-lisp
 ; Hide dotfiles by default
 (setq ranger-show-dotfiles nil)
@@ -1342,7 +1430,7 @@ Allocates all temporary files to a 'backup' directory
 
 #+END_SRC
 ** Wind move
-Keybindings to more easily switch windows than default =C-x o=. I now predominantly use Evil-leader custom keybindings for switching between windows and frames since I switched to mostly using Evil mode. 
+Keybindings to more easily switch windows than default =C-x o=. I now predominantly use Evil-leader custom keybindings for switching between windows and frames since I switched to mostly using Evil mode.
 #+BEGIN_SRC emacs-lisp
 (when (fboundp 'windmove-default-keybindings)
 (windmove-default-keybindings))
@@ -1428,4 +1516,3 @@ Enter Greek letters directly into buffer. Sometimes useful in org instead of \La
 (global-set-key (kbd "M-g Y") "Ψ")
 (global-set-key (kbd "M-g W") "Ω")
 #+END_SRC
-
