@@ -3,10 +3,7 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-;;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-;(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -19,8 +16,6 @@
 (require 'bind-key)
 
 ;; Load packages
-;(use-package org
-;  :ensure t)
 (use-package ac-js2
   :ensure t
   :mode "\\.js\\'")
@@ -186,30 +181,3 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;(defalias 'outline-show-all 'show-all) ; fix for Emacs 24
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode nil)
- '(desktop-save-mode nil)
- '(global hl-line-mode t)
- '(gud-tooltip-mode t)
- '(inhibit-startup-screen nil)
- '(org-agenda-files
-   (quote
-    ("~/Documents/Personal/personal.org" "~/UIC/Logistics/grad-school.org" "~/Lab/Notebook/leow-lab.org")))
- '(package-selected-packages
-   (quote
-    (ob-ipython zenburn-theme writeroom-mode which-key use-package sublimity solarized-theme smartparens realgud rainbow-delimiters org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac nlinum neotree minimap matlab-mode magit ledger-mode interleave helm-swoop helm-projectile helm-dictionary go gnugo git-gutter-fringe frame-cmds exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode elpy ein doom-themes docker discover dired+ diminish diff-hl dictionary csv-mode browse-kill-ring anchored-transpose ac-js2)))
- '(scroll-bar-mode nil)
- '(smartparens-global-mode t)
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
- '(cursor ((t (:background "turquoise1"))))
- '(linum ((t (:inherit default)))))

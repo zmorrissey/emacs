@@ -3,15 +3,6 @@
 #+AUTHOR: Zachery D. Morrissey
 #+STARTUP: indent
 
-* Add resources to load path
-#+BEGIN_SRC emacs-lisp
-;;(add-to-list 'load-path "~/.emacs.d/elpa/")
-#+END_SRC
-Ensure environment variables inside Emacs looks the same as in the user's shell
-#+BEGIN_SRC emacs-lisp
-;;(when (memq window-system '(mac ns x))
-;;  (exec-path-from-shell-initialize))
-#+END_SRC
 * Utility functions
 For custom-made functions
 ** TODO Org-ref sort all citations by date
@@ -478,8 +469,6 @@ Code navigation, documentation lookup and completion for Python
 ** R
 ESS: Emacs Speaks Statistics for working with R in Emacs
 #+BEGIN_SRC emacs-lisp
-  ;;(add-to-list 'load-path "/Users/Zach/.emacs.d/ess-16.04/lisp")
-  ;;(add-to-list 'load-path "/Users/Zach/.emacs.d/")
   (load "ess-site")
 
   ;; Rainbow-delimiters
@@ -545,8 +534,8 @@ Some custom evil-leader keymaps that I frequently use
     "0" 'delete-window
     "1" 'delete-other-windows
   ;; Symbols
-    "=" 'evil-org-verbatim-word
-    "/" 'evil-org-emph-word
+    "=" 'zdm-org-verbatim
+    "/" 'zdm-org-emph
     "(" 'begin-src-emacs-lisp
     "[" 'org-checkboxify
     "RET" 'eval-buffer
@@ -896,8 +885,8 @@ Use =C-x /= prefix followed by assigned keybinding to call
 
 
     ;; Custom ox-ipynb (John Kitchin)
-    (setq ox-ipynb "/home/zdm/Programming/Emacs/Elisp/ox-ipynb.el")
-    (require 'ox-ipynb)
+    ;(setq ox-ipynb "/home/zdm/Programming/Emacs/Elisp/ox-ipynb.el")
+    ;(require 'ox-ipynb)
   #+END_SRC
 *** Org-bookmark-heading
 Use to bookmark headings in org-mode
@@ -1031,23 +1020,35 @@ Sets default inline image width smaller to view in frame
 
   ;; Custom org-mode functions
 
-  (defun zdm-org-underline ()
-    "Underline word in org mode."
+  (defun zdm-org-surround (marker)
+    "Macro to surround a single word with 'marker'."
     (interactive)
     (save-excursion
       (skip-chars-backward "-_[:alnum:]")
-      (insert "_")
+      (insert marker)
       (skip-chars-forward "_[:alnum:]")
-      (insert "_")))
+      (insert marker)))
+
+  ;; zdm-org-surround implementations
+  (defun zdm-org-underline ()
+    "Underline word in org mode."
+    (interactive)
+    (zdm-org-surround "_"))
 
   (defun zdm-org-bold ()
     "Bold word in org mode."
     (interactive)
-    (save-excursion
-      (skip-chars-backward "-_[:alnum:]")
-      (insert "*")
-      (skip-chars-forward "_[:alnum:]")
-      (insert "*")))
+    (zdm-org-surround "*"))
+
+  (defun zdm-org-emph ()
+    "Emphasize (italicize) word in org mode."
+    (interactive)
+    (zdm-org-surround "/"))
+
+  (defun zdm-org-verbatim ()
+    "Verbatim word in org mode."
+    (interactive)
+    (zdm-org-surround "="))
 
 
 #+END_SRC
