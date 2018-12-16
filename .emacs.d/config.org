@@ -34,6 +34,37 @@ For custom-made functions
   ;return to push-mark
 
 #+END_SRC
+** Miscellaneous
+#+BEGIN_SRC emacs-lisp
+  ;; Create test files in specific programming languages
+  (defun zdm-create-py-test ()
+    "Create blank python file"
+    (interactive)
+    (find-file "~/Programming/Python/Scripts/test.py"))
+
+  (defun zdm-create-R-test ()
+    "Create blank python file"
+    (interactive)
+    (find-file "~/Programming/R/Scripts/test.R"))
+
+
+  (defun zdm-pdb ()
+    "Quickly load realgud if it hasn't been already, enter pdb"
+    (interactive)
+    (when (require 'realgud nil 'noerror)
+      (load-library "realgud")
+      (realgud:pdb))
+    )
+
+  (defun zdm-insert-literal-space ()
+    "Insert UTF-8 literal space for LaTeX after in-sentence periods."
+    (interactive)
+    (if (> emacs-major-version 25)
+        (insert (char-from-name "NON-BREAKING SPACE"))  ; Emacs 25
+      (insert (cdr (assoc "NON-BREAKING SPACE" (ucs-names))))  ; Emacs 26
+      )
+    )
+#+END_SRC
 * UI preferences
 ** Diminish mode
    :PROPERTIES:
@@ -267,7 +298,54 @@ Another line number mode (I think?)
 #+END_SRC
 ** Smart-parens
 #+BEGIN_SRC emacs-lisp
-(require 'smartparens-config)
+  ;; Load default configuration
+  (require 'smartparens-config)
+
+  (add-hook 'minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
+
+  ;; Keybinding management (from example configuration)
+  (define-key smartparens-mode-map (kbd "C-M-f") 'sp-forward-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-b") 'sp-backward-sexp)
+
+  (define-key smartparens-mode-map (kbd "C-M-d") 'sp-down-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-a") 'sp-backward-down-sexp)
+  (define-key smartparens-mode-map (kbd "C-S-d") 'sp-beginning-of-sexp)
+  (define-key smartparens-mode-map (kbd "C-S-a") 'sp-end-of-sexp)
+
+  (define-key smartparens-mode-map (kbd "C-M-e") 'sp-up-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-u") 'sp-backward-up-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-t") 'sp-transpose-sexp)
+
+  (define-key smartparens-mode-map (kbd "C-M-n") 'sp-forward-hybrid-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-p") 'sp-backward-hybrid-sexp)
+
+  (define-key smartparens-mode-map (kbd "C-M-k") 'sp-kill-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-w") 'sp-copy-sexp)
+
+  (define-key smartparens-mode-map (kbd "M-<delete>") 'sp-unwrap-sexp)
+  (define-key smartparens-mode-map (kbd "M-<backspace>") 'sp-backward-unwrap-sexp)
+
+  (define-key smartparens-mode-map (kbd "C-<right>") 'sp-forward-slurp-sexp)
+  (define-key smartparens-mode-map (kbd "C-<left>") 'sp-forward-barf-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-<right>") 'sp-backward-barf-sexp)
+
+  (define-key smartparens-mode-map (kbd "M-D") 'sp-splice-sexp)
+  (define-key smartparens-mode-map (kbd "C-M-<delete>") 'sp-splice-sexp-killing-forward)
+  (define-key smartparens-mode-map (kbd "C-M-<backspace>") 'sp-splice-sexp-killing-backward)
+  (define-key smartparens-mode-map (kbd "C-S-<backspace>") 'sp-splice-sexp-killing-around)
+
+  (define-key smartparens-mode-map (kbd "C-]") 'sp-select-next-thing-exchange)
+  (define-key smartparens-mode-map (kbd "C-<left_bracket>") 'sp-select-previous-thing)
+  (define-key smartparens-mode-map (kbd "C-M-]") 'sp-select-next-thing)
+
+  (define-key smartparens-mode-map (kbd "M-F") 'sp-forward-symbol)
+  (define-key smartparens-mode-map (kbd "M-B") 'sp-backward-symbol)
+
+  (define-key smartparens-mode-map (kbd "C-\"") 'sp-change-inner)
+  (define-key smartparens-mode-map (kbd "M-i") 'sp-change-enclosing)
+
+
 #+END_SRC
 ** Sublimity
 #+BEGIN_SRC emacs-lisp
@@ -361,11 +439,13 @@ C/C++
 
 Python
 #+BEGIN_SRC emacs-lisp
-  (setenv "PATH" (concat"/Library/Frameworks/Python.framework/Versions/3.4/bin/pdb" (getenv "PATH")))
+  (setenv "PATH" (concat "/home/zdm/.local/bin/ipython" (getenv "PATH")))
+  (setenv "PATH" (concat "/usr/bin/python3" (getenv "PATH")))
   (setq exec-path (split-string (getenv "PATH") path-separator))
-  ;;(setq pdb-command-name "/Library/Frameworks/Python.framework/Versions/3.4/bin/pdb")
   (setq realgud:pdb-command-name "python3 -m pdb")
 #+END_SRC
+** Emacs Lisp
+
 ** Javascript
 *** js2
 #+BEGIN_SRC emacs-lisp
@@ -374,6 +454,20 @@ Python
 
 ;; ac-js2 for JavaScript autocompletion
 (add-hook 'js2-mode-hook 'ac-js2-mode)
+#+END_SRC
+** Lilypond
+#+BEGIN_SRC emacs-lisp
+  (setq load-path (append (list (expand-file-name
+  "/usr/local/lilypond/usr/share/emacs/site-lisp")) load-path))
+  (autoload 'LilyPond-mode "lilypond-mode" "LilyPond Editing Mode" t)
+  (add-to-list 'auto-mode-alist '("\\.ly$" . LilyPond-mode))
+  (add-to-list 'auto-mode-alist '("\\.ily$" . LilyPond-mode))
+#+END_SRC
+** Lisp
+Common Lisp
+
+#+BEGIN_SRC emacs-lisp
+
 #+END_SRC
 ** Magit
 #+BEGIN_SRC emacs-lisp
@@ -413,6 +507,13 @@ Python
     (auto-complete-mode 1))
 
   (add-hook 'matlab-mode-hook 'my-matlab-mode-hook)
+
+
+  ;; Add Matlab to Emacs environment path
+  (setenv "PATH" (concat "/usr/local/MATLAB/R2017b/bin/matlab" (getenv "PATH")))
+  (setenv "PATH" (concat "/usr/local/MATLAB/R2017b/bin/glnxa64/MATLAB" (getenv "PATH")))
+  (setenv "MATLABCMD" "/usr/local/MATLAB/R2017b/bin/glnxa64/MATLAB")
+
 #+END_SRC
 ** Projectile
 #+BEGIN_SRC emacs-lisp
@@ -424,18 +525,26 @@ Python
   (package-initialize)
   (elpy-enable)
 
-  ;; Use python 3
+  ;; Use python 3 + ipython
   (setq elpy-rpc-python-command "python3")
-  ;(setq python-shell-interpreter "python3")
-  (setq python-shell-interpreter "ipython3"
-        python-shell-interpreter-args "-i --simple-prompt")
 
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt --pprint")
 
   ;; PDB
   (setq gud-pdb-command-name "python3 -m pdb")
 
   ;; Bind return to indent for docstrings
   ;(define-key elpy-mode-map (kbd "<return>") 'elpy-open-and-indent-line-below)
+
+  ;; Environment set up
+  ;; (from ipython.org documentation)
+  (defvar server-buffer-clients)
+  (when (and (fboundp 'server-start) (string-equal (getenv "TERM") 'xterm))
+    (server-start)
+    (defun fp-kill-server-with-buffer-routine ()
+      (and server-buffer-clients (server-done)))
+    (add-hook 'kill-buffer-hook 'fp-kill-server-with-buffer-routine))
 #+END_SRC
 *** Anaconda mode
 Code navigation, documentation lookup and completion for Python
@@ -539,7 +648,7 @@ Some custom evil-leader keymaps that I frequently use
     "(" 'begin-src-emacs-lisp
     "[" 'org-checkboxify
     "RET" 'eval-buffer
-    "<SPC>" 'linum-relative-mode
+    "<SPC>" 'zdm-insert-literal-space
   ;; A-Z
     "B" 'ibuffer
     "E" 'sudo-edit
@@ -595,6 +704,7 @@ Default state is vim =<N>=, to make it emacs =<E>=, turn on =(setq evil-default-
   (evil-set-initial-state 'calendar-mode 'emacs)
   (evil-set-initial-state 'discover-mode 'emacs)
   (evil-set-initial-state 'neotree-mode 'emacs)
+  (evil-set-initial-state 'eww-mode-hook 'emacs)
 
 #+END_SRC
 
@@ -695,6 +805,52 @@ Use =C-x /= prefix followed by assigned keybinding to call
   (global-set-key "\C-cb" 'org-iswitchb)
   #+END_SRC
 ** Customizations
+*** Blogging
+#+BEGIN_SRC emacs-lisp
+    ;; Org publish variables
+    ;; Copied from: https://bastibe.de/2013-11-13-blogging-with-emacs.html
+    (setq org-publish-project-alist
+          '(("blog"
+             :base-directory "~/Documents/Personal/Blog/org/"
+             :html-extension "html"
+             :base-extension "org"
+             :publishing-directory ""
+             :publishing-function (org-html-publish-to-html)
+             :recursive t          ; descend into sub-folders?
+             :section-numbers nil  ; don't create numbered sections
+             :with-toc nil         ; don't create a table of contents
+             :with-latex t         ; do use MathJax for awesome formulas!
+             :html-head-extra ""   ; extra <head> entries go here
+             :html-preamble ""     ; this stuff is put before your post
+             :html-postamble ""    ; this stuff is put after your post
+             )
+            ("images"
+             :base-directory "~/Documents/Personal/Blog/org/images/"
+             :base-extension "png\\|jpg\\|css"
+             :publishing-directory ""
+             :recursive t
+             :publishing-function org-publish-attachment)
+            ("js"
+             :base-directory "~/Documents/Personal/Blog/org/js/"
+             :base-extension "js"
+             :publishing-directory ""
+             :publishing-function org-publish-attachment)
+            ("css"
+             :base-directory "~/Documents/Personal/Blog/org/css/"
+             :base-extension "css"
+             :publishing-directory ""
+             :publishing-function org-publish-attachment)
+            ;("rss"
+            ; :base-directory "~/Documents/Personal/Blog/org/"
+            ; :base-extension "org"
+            ; :publishing-directory ""
+            ; :publishing-function (org-rss-publish-to-rss)
+            ; :html-link-home ""
+            ; :html-link-use-abs-url t)
+            ("website" :components ("org" "blog" "images" "js" "css"))
+  )
+  )
+#+END_SRC
 *** Capture templates
   #+BEGIN_SRC emacs-lisp
     (setq org-default-notes-file "~/Documents/notes.org")
@@ -715,6 +871,12 @@ Use =C-x /= prefix followed by assigned keybinding to call
               "Lab logistics"
               entry
               (file+headline "/home/zdm/Lab/Notebook/leow-lab.org" "Logistics")
+              "* %?\n  %i\n")
+
+             ("e"
+              "Lab events"
+              entry
+              (file+headline "/home/zdm/Lab/Notebook/leow-lab.org" "Events")
               "* %?\n  %i\n")
 
              ("p"
@@ -880,7 +1042,7 @@ Use =C-x /= prefix followed by assigned keybinding to call
     ;; Disable src block evaluation on export
     (setq org-export-babel-evaluate nil)
 
-    ;; Set ipython minted same as pythong
+    ;; Set ipython minted same as python
     (add-to-list 'org-latex-minted-langs '(ipython "python"))
 
 
@@ -940,6 +1102,11 @@ Sets default inline image width smaller to view in frame
 
 #+BEGIN_SRC emacs-lisp
   (setq org-image-actual-width 400)
+#+END_SRC
+*** Org-pomodoro
+#+BEGIN_SRC emacs-lisp
+  ;; Change org-pomodoro alarm sound
+  ;(setq org-pomodoro-start-sound "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
 #+END_SRC
 *** Org-ref
 **** Base setup
@@ -1181,6 +1348,12 @@ If using Evil mode, use =M-y= while in =Insert= mode
 (setq dired-omit-files "^\\...+$")
 (add-hook 'dired-mode-hook (lambda () (dired-omit-mode 1))) ; M-o to toggle
 #+END_SRC
+** EWW
+#+BEGIN_SRC emacs-lisp
+  ;; Mode for Reddit
+  (require 'md4rd)
+  ;(md4rd)
+#+END_SRC
 ** Helm
 #+BEGIN_SRC emacs-lisp
   ;; 'M-x helm-M-x RET helm-' lists helm commands ready for narrowing and selecting.
@@ -1317,6 +1490,14 @@ Convert plain list to checkboxes. Call with C-u prefix for # of lines
 (fset 'org-checkboxify
    [?i ?- ?  ?\[ ?  ?\C-f ?  escape ?F ?- ?j])
 #+END_SRC
+*** Insert literal space
+#+BEGIN_SRC emacs-lisp
+    ;; Macro for literal space
+    (fset 'insert-utf8-space
+       [?i ?\C-x ?8 ?  ?\C-f backspace escape])
+
+
+#+END_SRC
 ** Make kill ring and OS X clipboard separate
 #+BEGIN_SRC emacs-lisp
 (setq save-interprogram-paste-before-kill t)
@@ -1411,12 +1592,16 @@ Set sentences to be a period (full-stop) followed by one space
 (setq sentence-end-double-space nil)
 #+END_SRC
 ** Spellcheck
-Use =flyspell= for spellchecking
+Use =flyspell= for spellchecking in org-mode
 
 # Add hook to be only active in certain modes?
 
 #+BEGIN_SRC emacs-lisp
-(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+  (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
+
+  ;; Org-mode spell checking
+  (add-hook 'org-mode-hook 'flyspell-mode t)
+  (add-hook 'org-mode-hook 'flyspell-buffer)
 #+END_SRC
 ** Temporary files
 Allocates all temporary files to a 'backup' directory
