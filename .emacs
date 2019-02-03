@@ -102,8 +102,6 @@
   :ensure t)
 (use-package find-file-in-project
   :ensure t)
-(use-package font-lock+
-  :ensure t)
 (use-package frame-cmds
   :ensure t)
 (use-package frame-fns
@@ -156,7 +154,10 @@
 (use-package org-ref
   :ensure t)
 (use-package pdf-tools
-  :ensure t)
+  :ensure t
+  :config
+  (pdf-tools-install)
+  (require 'pdf-occur))
 (use-package rainbow-delimiters
   :ensure t)
 (use-package realgud
@@ -208,7 +209,7 @@
    "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
  '(package-selected-packages
    (quote
-    (md4rd slime zenburn-theme writeroom-mode which-key use-package sublimity solarized-theme smartparens realgud rainbow-delimiters org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac ob-ipython nlinum neotree minimap matlab-mode magit ledger-mode interleave helm-swoop helm-projectile helm-dictionary go gnugo git-gutter-fringe frame-cmds exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode elpy ein doom-themes docker discover dired+ diminish diff-hl dictionary csv-mode browse-kill-ring anchored-transpose ac-js2)))
+    (md4rd slime zenburn-theme writeroom-mode which-key use-package sublimity solarized-theme smartparens realgud rainbow-delimiters org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac ob-ipython nlinum neotree minimap matlab-mode magit ledger-mode interleave helm-swoop helm-projectile helm-dictionary go gnugo git-gutter-fringe frame-cmds exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode elpy ein doom-themes docker discover dired+ diminish diff-hl dictionary csv-mode browse-kill-ring anchored-transpose)))
  '(scroll-bar-mode nil)
  '(smartparens-global-mode t)
  '(tool-bar-mode nil))
@@ -218,5 +219,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
- '(cursor ((t (:background "turquoise1"))))
  '(linum ((t (:inherit default)))))

@@ -64,6 +64,18 @@ For custom-made functions
       (insert (cdr (assoc "NON-BREAKING SPACE" (ucs-names))))  ; Emacs 26
       )
     )
+
+  (defun zdm-org-insert-word-definition ()
+    (interactive)
+    (save-excursion
+      (setq word-definition
+            (shell-command-to-string
+             (concat "dict "
+                     (thing-at-point 'word))))
+      (org-end-of-line)
+      (org-return)
+      (insert word-definition)))
+
 #+END_SRC
 * UI preferences
 ** Diminish mode
@@ -215,7 +227,6 @@ Change fringe settings
            )
 
           (custom-set-faces
-           '(cursor ((t (:background "turquoise1"))))
            ;'(fringe ((t (:inherit default))))
            '(linum ((t (:inherit default))))
            '(default ((t (:inherit nil
@@ -575,6 +586,36 @@ Code navigation, documentation lookup and completion for Python
   ;; Fold code with hs-minor-mode
   (add-hook 'elpy-mode-hook 'hs-minor-mode)
 #+END_SRC
+*** ipython + jupyter in org-mode
+
+#+BEGIN_SRC emacs-lisp
+  ;; Hack to execute ipython src blocks in org-mode
+  ;; https://emacs.stackexchange.com/questions/30082/your-python-shell-interpreter-doesn-t-seem-to-support-readline#30970
+
+  (setq python-shell-prompt-detect-failure-warning nil)
+
+  (with-eval-after-load 'ipython
+    (defun python-shell-completion-native-try ()
+      "Return non-nil if can trigger native completion."
+      (let ((python-shell-completion-native-enable t)
+            (python-shell-completion-native-output-timeout
+             python-shell-completion-native-try-output-timeout))
+        (python-shell-completion-native-get-completions
+         (get-buffer-process (current-buffer))
+         nil "_"))))
+#+END_SRC
+*** EIN settings
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'ein:notebook-mode-hook 'elpy-mode)
+#+END_SRC
+*** ox-ipynb
+
+Add J. Kitchin's =ox-ipynb= export functionality to export org-mode files as jupyter notebooks.
+
+#+BEGIN_SRC emacs-lisp
+  ;(load-file "/home/zdm/Lab/Tools/scimax/scimax/ox-ipynb/ox-ipynb.el")
+#+END_SRC
 ** R
 ESS: Emacs Speaks Statistics for working with R in Emacs
 #+BEGIN_SRC emacs-lisp
@@ -655,6 +696,7 @@ Some custom evil-leader keymaps that I frequently use
     "H" 'hs-toggle-hiding
     "I" 'ess-indent-command
     "M" 'helm-bookmarks
+    "R" 'helm-register
     "S" 'delete-trailing-whitespace
     "T" 'helm-top
     "V" 'interleave-mode
@@ -1048,7 +1090,9 @@ Use =C-x /= prefix followed by assigned keybinding to call
 
     ;; Custom ox-ipynb (John Kitchin)
     ;(setq ox-ipynb "/home/zdm/Programming/Emacs/Elisp/ox-ipynb.el")
-    ;(require 'ox-ipynb)
+    (add-to-list 'load-path "~/Programming/Emacs/Elisp")
+    (load "~/Programming/Emacs/Elisp/ox-ipynb.el")
+    (require 'ox-ipynb)
   #+END_SRC
 *** Org-bookmark-heading
 Use to bookmark headings in org-mode
@@ -1101,7 +1145,12 @@ Use to bookmark headings in org-mode
 Sets default inline image width smaller to view in frame
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-image-actual-width 400)
+  (setq org-image-actual-width 600)
+
+  ;; Automatically update inline images after executing
+  ;; code block
+
+  (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
 #+END_SRC
 *** Org-pomodoro
 #+BEGIN_SRC emacs-lisp
@@ -1535,7 +1584,7 @@ Install epdfinfo via =brew install pdf-tools= and then install the pdf-tools eli
   ;(custom-set-variables
   ;  '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
   ;(setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
-(pdf-tools-install)
+;(pdf-tools-install)
 
 ; See page numbers in pdf-tools buffer
 ;(define-pdf-cache-function pagelabels)
