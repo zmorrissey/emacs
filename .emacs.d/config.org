@@ -450,8 +450,11 @@ C/C++
 
 Python
 #+BEGIN_SRC emacs-lisp
-  (setenv "PATH" (concat "/home/zdm/.local/bin/ipython" (getenv "PATH")))
-  (setenv "PATH" (concat "/usr/bin/python3" (getenv "PATH")))
+  ;(setenv "PATH" (concat "/home/zdm/.local/bin/ipython" (getenv "PATH")))
+  ;(setenv "PATH" (concat "/usr/bin/python3" (getenv "PATH")))
+  (setenv "PATH" (concat "/home/zdm/anaconda3/bin/python3" (getenv "PATH")))
+  (setenv "PATH" (concat "/home/zdm/anaconda3/bin/ipython" (getenv "PATH")))
+
   (setq exec-path (split-string (getenv "PATH") path-separator))
   (setq realgud:pdb-command-name "python3 -m pdb")
 #+END_SRC
@@ -607,7 +610,7 @@ Code navigation, documentation lookup and completion for Python
 *** EIN settings
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'ein:notebook-mode-hook 'elpy-mode)
+  ;(add-hook 'ein:notebook-mode-hook 'elpy-mode)
 #+END_SRC
 *** ox-ipynb
 
@@ -617,7 +620,7 @@ Add J. Kitchin's =ox-ipynb= export functionality to export org-mode files as jup
   ;(load-file "/home/zdm/Lab/Tools/scimax/scimax/ox-ipynb/ox-ipynb.el")
 #+END_SRC
 ** R
-ESS: Emacs Speaks Statistics for working with R in Emacs
+*** ESS: Emacs Speaks Statistics for working with R in Emacs
 #+BEGIN_SRC emacs-lisp
   (load "ess-site")
 
@@ -626,6 +629,81 @@ ESS: Emacs Speaks Statistics for working with R in Emacs
 
   (add-hook 'ess-mode-hook #'nlinum-mode)
 
+
+#+END_SRC
+*** [[https://www.emacswiki.org/emacs/ESS-smart-lessthan][Smarter less-than customization]]
+#+BEGIN_SRC emacs-lisp
+  ;; Smart underscore customization
+  ;; Assigns "<" symbol to be assign key
+
+  ; (setq ess-S-assign " <- ")
+  ; (setq ess-my-smart-key "<")
+  ;
+  ; (defun ess-insert-S-assign-mod ()
+  ;   (interactive)
+  ;   (let ((ess-S-assign " <- ") (assign-len (length ess-S-assign)))
+  ;     (if (and
+  ;          (>= (point) (+ assign-len (point-min)))
+  ;          (save-excursion
+  ;            (backward-char assign-len)
+  ;            (looking-at ess-S-assign)))
+  ;         (progn
+  ;           (delete-char (- assign-len))
+  ;           (insert ess-my-smart-key))
+  ;       (delete-horizontal-space)
+  ;       (insert ess-S-assign))))
+  ;
+  ; (defun ess-smart-lt ()
+  ;   (interactive)
+  ;   (if (or (looking-at ess-S-assign)
+  ;           (ess-inside-string-or-comment-p (point)))
+  ;       (insert ess-my-smart-key)
+  ;     (ess-insert-S-assign-mod)))
+  ;
+  ; (add-hook 'R-mode-hook (lambda () (local-set-key ess-my-smart-key 'ess-smart-lt)))
+  ; (add-hook 'inferior-ess-mode-hook (lambda () (local-set-key ess-my-smart-key 'ess-smart-lt)))
+  ; (add-hook 'R-mode-hook (lambda () (local-set-key (kbd "_") 'self-insert-command)))
+  ; (add-hook 'inferior-ess-mode-hook (lambda () (local-set-key (kbd "_") 'self-insert-command)))
+
+#+END_SRC
+*** [[https://www.emacswiki.org/emacs/ESSShiftEnter][Shift-enter setup]]
+
+#+BEGIN_SRC emacs-lisp
+  ; (setq ess-ask-for-ess-directory nil)
+  ; (setq ess-local-process-name "R")
+  ; (setq ansi-color-for-comint-mode 'filter)
+  ; (setq comint-prompt-read-only t)
+  ; (setq comint-scroll-to-bottom-on-input t)
+  ; (setq comint-scroll-to-bottom-on-output t)
+  ; (setq comint-move-point-for-output t)
+  ;
+  ; (defun my-ess-start-R ()
+  ;   (interactive)
+  ;   (if (not (member "*R*" (mapcar (function buffer-name) (buffer-list))))
+  ;     (progn
+  ; (delete-other-windows)
+  ; (setq w1 (selected-window))
+  ; (setq w1name (buffer-name))
+  ; (setq w2 (split-window w1))
+  ; (R)
+  ; (set-window-buffer w2 "*R*")
+  ; (set-window-buffer w1 w1name))))
+  ;
+  ; (defun my-ess-eval ()
+  ;   (interactive)
+  ;   (my-ess-start-R)
+  ;   (if (and transient-mark-mode mark-active)
+  ; (call-interactively 'ess-eval-region)
+  ;     (call-interactively 'ess-eval-line-and-step)))
+  ;
+  ; (add-hook 'ess-mode-hook
+  ;     '(lambda()
+  ;        (local-set-key [(shift return)] 'my-ess-eval)))
+  ;
+  ; (add-hook 'inferior-ess-mode-hook
+  ;           '(lambda()
+  ;              (local-set-key [C-up] 'comint-previous-input)
+  ;              (local-set-key [C-down] 'comint-next-input)))
 #+END_SRC
 ** TeX
 *** AucTeX
@@ -695,7 +773,7 @@ Some custom evil-leader keymaps that I frequently use
     "E" 'sudo-edit
     "H" 'hs-toggle-hiding
     "I" 'ess-indent-command
-    "M" 'helm-bookmarks
+    "M" 'toggle-frame-maximized
     "R" 'helm-register
     "S" 'delete-trailing-whitespace
     "T" 'helm-top
@@ -713,7 +791,7 @@ Some custom evil-leader keymaps that I frequently use
     "i" 'package-install
     "k" 'kill-buffer
     "l" 'evil-org-open-links
-    "m" 'bookmark-bmenu-list
+    "m" 'helm-bookmarks
     "n" 'nlinum-mode
     "o" 'evil-newline
     "p" 'package-list-packages
