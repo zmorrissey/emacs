@@ -106,6 +106,10 @@
   :ensure t)
 (use-package evil-tutor
   :ensure t)
+(use-package eyebrowse
+  :ensure t
+  :config
+  (eyebrowse-mode t))
 (use-package f
   :ensure t)
 (use-package find-file-in-project
@@ -223,7 +227,7 @@
    "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
  '(package-selected-packages
    (quote
-    (markdown-mode ess-smart-underscore ess nov md4rd slime zenburn-theme writeroom-mode which-key use-package sublimity solarized-theme smartparens realgud rainbow-delimiters org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac ob-ipython nlinum neotree minimap matlab-mode magit ledger-mode interleave helm-swoop helm-projectile helm-dictionary go gnugo git-gutter-fringe frame-cmds exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode elpy ein doom-themes docker discover dired+ diminish diff-hl dictionary csv-mode browse-kill-ring anchored-transpose)))
+    (eyebrowse markdown-mode ess-smart-underscore ess nov md4rd slime zenburn-theme writeroom-mode which-key use-package sublimity solarized-theme smartparens realgud rainbow-delimiters org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac ob-ipython nlinum neotree minimap matlab-mode magit ledger-mode interleave helm-swoop helm-projectile helm-dictionary go gnugo git-gutter-fringe frame-cmds exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode elpy ein doom-themes docker discover dired+ diminish diff-hl dictionary csv-mode browse-kill-ring anchored-transpose)))
  '(scroll-bar-mode nil)
  '(smartparens-global-mode t)
  '(tool-bar-mode nil))
@@ -232,5 +236,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 140 :width normal :foundry "nil" :family "Ubuntu Mono"))))
+ '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
  '(linum ((t (:inherit default)))))
