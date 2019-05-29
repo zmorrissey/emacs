@@ -83,6 +83,24 @@ For custom-made functions
 
   (define-key dired-mode-map (kbd "W") 'zdm-dired-copy-path-at-point)
 
+  (defun zdm-kill-buffer-other-window ()
+    "Kill buffer in other window without leaving current window."
+    (interactive)
+    (other-window 1)
+    (kill-buffer)
+    (other-window 1))
+
+  (define-key global-map (kbd "C-x C-k o") 'zdm-kill-buffer-other-window)
+
+  (defun zdm-swap-windows ()
+    "Swap positions of buffers in two currently open windows."
+    (interactive)
+    (let ((w1 (current-buffer))
+          (w2 (buffer-name (other-window 1))))
+      (switch-to-buffer w1)
+      (other-window 1)
+      (switch-to-buffer w2)
+      (other-window 1)))
 #+END_SRC
 * UI preferences
 ** Diminish mode
@@ -626,6 +644,16 @@ Add J. Kitchin's =ox-ipynb= export functionality to export org-mode files as jup
 #+BEGIN_SRC emacs-lisp
   ;(load-file "/home/zdm/Lab/Tools/scimax/scimax/ox-ipynb/ox-ipynb.el")
 #+END_SRC
+*** Tabs and spaces
+Make consistent across modes
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'elpy-mode-hook
+        (lambda ()
+          (setq-default indent-tabs-mode nil)
+          (setq-default tab-width 4)
+          (setq-default python-indent 4)))
+#+END_SRC
 ** R
 *** ESS: Emacs Speaks Statistics for working with R in Emacs
 #+BEGIN_SRC emacs-lisp
@@ -635,6 +663,9 @@ Add J. Kitchin's =ox-ipynb= export functionality to export org-mode files as jup
   (add-hook 'ess-mode-hook #'rainbow-delimiters-mode)
 
   (add-hook 'ess-mode-hook #'nlinum-mode)
+
+  (setq ess-use-auto-complete nil)
+
 
 
 #+END_SRC
@@ -775,11 +806,13 @@ Some custom evil-leader keymaps that I frequently use
     "[" 'org-checkboxify
     "RET" 'eval-buffer
     "<SPC>" 'zdm-insert-literal-space
+    "`" 'zdm-swap-windows
   ;; A-Z
     "B" 'ibuffer
     "E" 'sudo-edit
     "H" 'hs-toggle-hiding
     "I" 'ess-indent-command
+    "K" 'zdm-kill-buffer-other-window
     "M" 'toggle-frame-maximized
     "R" 'helm-register
     "S" 'delete-trailing-whitespace
@@ -1113,12 +1146,12 @@ Use =C-x /= prefix followed by assigned keybinding to call
  #+END_SRC
 *** Org-ac
 #+BEGIN_SRC emacs-lisp
-(require 'org-ac)
+  ;(require 'org-ac)
 
-;; Make config suit for you. About the config item, eval the following sexp.
-;; (customize-group "org-ac")
+  ;; Make config suit for you. About the config item, eval the following sexp.
+  ;; (customize-group "org-ac")
 
-(org-ac/config-default)
+  ;(org-ac/config-default)
 #+END_SRC
 *** Org-babel
   #+BEGIN_SRC emacs-lisp
@@ -1446,20 +1479,21 @@ Tranposes a selected region of text around a specified anchor point. Select enti
 #+END_SRC
 ** Auto-complete
 #+BEGIN_SRC emacs-lisp
-  (require 'auto-complete-config)
-  (ac-config-default)
+  ;(require 'auto-complete-config)
+  ;(ac-config-default)
 
   ;; Disable auto-complete-mode for python-mode so it does not conflict
   ;; with elpy
-  (defadvice auto-complete-mode (around disable-auto-complete-for-python)
-    (unless (eq major-mode 'python-mode) ad-do-it))
+  ;(defadvice auto-complete-mode (around disable-auto-complete-for-python)
+  ;  (unless (eq major-mode 'python-mode) ad-do-it))
 
-  (ad-activate 'auto-complete-mode)
+  ;(ad-activate 'auto-complete-mode)
+  (auto-complete-mode nil)
 
 
   ;; Turn auto-complete mode off for certain modes
   ; find way to make list of mode hooks
-  (add-hook 'elpy-mode-hook (lambda () (auto-complete-mode nil)))
+  ;(add-hook 'elpy-mode-hook (lambda () (auto-complete-mode nil)))
   ; If you really like the menu to show immediately
   ;(setq ac-show-menu-immediately-on-auto-complete t)
 #+END_SRC
@@ -1471,6 +1505,14 @@ If using Evil mode, use =M-y= while in =Insert= mode
 ; Now, the M-y key binding will activate browse-kill-ring iff the normal behavior (see above) is not available, i.e., when the last command was not a 'yank'. You can also edit the kill-ring (press C-h m when in the browse-kill-ring-buffer to see the available bindings).
 
 
+#+END_SRC
+** Company mode
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook 'global-company-mode)
+
+  ;; Disable to avoid conflict with elpy
+  (add-hook 'elpy-mode-hook (lambda () (company-mode nil)))
 #+END_SRC
 ** Dired+
 #+BEGIN_SRC emacs-lisp
