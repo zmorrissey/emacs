@@ -260,13 +260,13 @@ Some functions for detecting frame size on startup and for resizing frames.
 #+END_SRC
 *** Theme
 #+BEGIN_SRC emacs-lisp
-  (defun my-tone-down-fringes ()
-    ;; Set fringe color to match background color of theme
-    (set-face-attribute 'fringe nil
-                        :foreground (face-background 'default)
-                        :background (face-background 'default)))
-
-  (my-tone-down-fringes)
+  ;(defun my-tone-down-fringes ()
+  ;  ;; Set fringe color to match background color of theme
+  ;  (set-face-attribute 'fringe nil
+  ;                      :foreground (face-background 'default)
+  ;                      :background (face-background 'default)))
+  ;
+  ;(my-tone-down-fringes)
   ;  (add-hook 'emacs-startup-hook 'my-tone-down-fringes)
 #+END_SRC
 ** Menu bar
@@ -337,18 +337,38 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
 #+END_SRC
 
 ** Themes
+
+Clear other theme settings before using =load-theme=.
+
+#+BEGIN_SRC emacs-lisp
+  (defadvice load-theme (before clear-previous-themes activate)
+    "Clear existing theme settings instead of layering them"
+    (mapc #'disable-theme custom-enabled-themes))
+#+END_SRC
 *** Solarized
 
 #+BEGIN_SRC emacs-lisp
-  ;(load-theme 'solarized-dark)
-#+END_SRC
+  ;; Don't change size of org-mode headlines (but keep other size-changes)
+  (setq solarized-scale-org-headlines nil)
 
+  ;; Don't change the font for some headings and titles
+  (setq solarized-use-variable-pitch nil)
+
+  ;; Avoid all font-size changes
+  (setq solarized-height-minus-1 1.0)
+  (setq solarized-height-plus-1 1.0)
+  (setq solarized-height-plus-2 1.0)
+  (setq solarized-height-plus-3 1.0)
+  (setq solarized-height-plus-4 1.0)
+
+  (load-theme 'solarized-light t)
+
+#+END_SRC
 *** Zenburn
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'zenburn t)
+  ;(load-theme 'zenburn t)
 #+END_SRC
-
 ** Tool bar
 
 #+BEGIN_SRC emacs-lisp

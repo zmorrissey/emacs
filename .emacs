@@ -69,11 +69,7 @@
 (use-package dired+
   :ensure t)
 (use-package doom-themes
-  :ensure t
-  :init
-  (defun my/org-mode-hook ()
-    (set-face-attribute 'org-level-1 nil :height 1.0 :background nil))
-  (add-hook 'org-load-hook #'my/org-mode-hook))
+  :ensure t)
 (use-package ein
   :ensure t
   :config
@@ -189,6 +185,8 @@
   :init
   (require 'smartparens-config))
 (use-package slime
+  :ensure t)
+(use-package solarized-theme
   :ensure t)
 (use-package sublimity
   :ensure t
