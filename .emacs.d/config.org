@@ -320,12 +320,12 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
 #+END_SRC
 ** Scrolling
 #+BEGIN_SRC emacs-lisp
-  ;; scroll one line at a time (less "jumpy" than defaults)
-  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))  ; one line at a time
-  (setq mouse-wheel-progressive-speed nil)  ; don't accelerate scrolling
-  (setq mouse-wheel-follow-mouse 't)  ; scroll window under mouse
-  (setq scroll-step 1)  ; keyboard scroll one line at a time
-  (scroll-bar-mode -1)  ; disable scroll bar
+  ;; Adjust scrolling parameters
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  (setq mouse-wheel-progressive-speed nil)
+  (setq mouse-wheel-follow-mouse 't)
+  (setq scroll-step 1)
+  (scroll-bar-mode -1)
 #+END_SRC
 ** Startup
 
@@ -532,21 +532,22 @@ Make tabs/spaces consistent across modes.
 #+END_SRC
 ** TeX
 *** AucTeX
-  Configure for Latex export with =minted=.
+  Configure for LaTex export with =minted=.
   #+BEGIN_SRC emacs-lisp
     (setq LaTeX-command-style '(("" "%(PDF)%(latex) -shell-escape %S%(PDFout)")))
   #+END_SRC
-*** RefTeX + Org-mode
+*** RefTeX + =org-mode=
  #+BEGIN_SRC emacs-lisp
    (defun org-mode-reftex-setup ()
-   (load-library "reftex")
-   (and (buffer-file-name)
-   (file-exists-p (buffer-file-name))
-   (reftex-parse-all))
-   (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
+     (load-library "reftex")
+     (and (buffer-file-name)
+          (file-exists-p (buffer-file-name))
+          (reftex-parse-all))
+     (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
+
    (add-hook 'org-mode-hook 'org-mode-reftex-setup)
  #+END_SRC
-* Evil mode
+* =evil-mode=
 ** Custom functions
 #+BEGIN_SRC emacs-lisp
   (defun evil-newline ()
@@ -569,7 +570,7 @@ Needs to be enabled before evil, otherwise it won't be enabled in initial buffer
 (global-evil-leader-mode)
 #+END_SRC
 
-Leader key default is =\=. =,= is also popular, but I prefer using =SPC=.
+Leader key default is =\=, but I prefer using =SPC=.
 #+BEGIN_SRC emacs-lisp
 (evil-leader/set-leader "<SPC>")
 #+END_SRC
@@ -578,55 +579,55 @@ Some custom evil-leader keymaps that I frequently use.
 #+BEGIN_SRC emacs-lisp
   (evil-leader/set-key
     ;; 0-9
-    "0" 'delete-window
-    "1" 'delete-other-windows
+    "0"     'delete-window
+    "1"     'delete-other-windows
 
     ;; Symbols
-    "=" 'zdm-org-verbatim
-    "/" 'zdm-org-emph
-    "(" 'begin-src-emacs-lisp
-    "[" 'org-checkboxify
-    "RET" 'eval-buffer
+    "="     'zdm-org-verbatim
+    "/"     'zdm-org-emph
+    "("     'begin-src-emacs-lisp
+    "["     'org-checkboxify
+    "RET"   'eval-buffer
     "<SPC>" 'zdm-insert-literal-space
-    "`" 'zdm-swap-windows
+    "`"     'zdm-swap-windows
 
     ;; A-Z
-    "B" 'ibuffer
-    "E" 'sudo-edit
-    "H" 'hs-toggle-hiding
-    "I" 'ess-indent-command
-    "K" 'zdm-kill-buffer-other-window
-    "M" 'toggle-frame-maximized
-    "R" 'helm-register
-    "S" 'delete-trailing-whitespace
-    "T" 'eshell
-    "V" 'interleave-mode
-    "W" 'helm-man-woman
+    "B"     'ibuffer
+    "E"     'sudo-edit
+    "H"     'hs-toggle-hiding
+    "I"     'ess-indent-command
+    "K"     'zdm-kill-buffer-other-window
+    "M"     'toggle-frame-maximized
+    "R"     'helm-register
+    "S"     'delete-trailing-whitespace
+    "T"     'eshell
+    "V"     'interleave-mode
+    "W"     'helm-man-woman
 
     ;; a-z
-    "a" 'org-agenda
-    "b" 'helm-buffers-list                ; for ido-mode: 'switch-to-buffer
-    "c" 'ledger-mode-clean-buffer
-    "d" 'zdm-org-bold
-    "e" 'helm-find-files                  ; for ido-mode: 'find-file
-    "f" 'other-frame
-    "g" 'magit-status
-    "h" 'split-window-below
-    "i" 'package-install
-    "k" 'kill-buffer
-    "l" 'evil-org-open-links
-    "m" 'helm-bookmarks
-    "n" 'nlinum-mode
-    "o" 'evil-newline
-    "p" 'package-list-packages
-    "r" 'helm-multi-files
-    "s" 'org-ref-sort-citation-link
-    "t" 'neotree-toggle
-    "u" 'zdm-org-underline
-    "v" 'split-window-right
-    "w" 'other-window
-    "x" 'mark-done-and-archive
-    "y" 'helm-show-kill-ring)
+    "a"     'org-agenda
+    "b"     'helm-buffers-list
+    "c"     'ledger-mode-clean-buffer
+    "d"     'zdm-org-bold
+    "e"     'helm-find-files
+    "f"     'other-frame
+    "g"     'magit-status
+    "h"     'split-window-below
+    "i"     'package-install
+    "k"     'kill-buffer
+    "l"     'evil-org-open-links
+    "m"     'helm-bookmarks
+    "n"     'nlinum-mode
+    "o"     'evil-newline
+    "p"     'package-list-packages
+    "r"     'helm-multi-files
+    "s"     'org-ref-sort-citation-link
+    "t"     'neotree-toggle
+    "u"     'zdm-org-underline
+    "v"     'split-window-right
+    "w"     'other-window
+    "x"     'mark-done-and-archive
+    "y"     'helm-show-kill-ring)
 #+END_SRC
 ** Evil
 Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default-state 'emacs')=.
@@ -651,13 +652,13 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
 Make evil-mode insert state act more like native Emacs.
 
 #+BEGIN_SRC emacs-lisp
-  ; redefine emacs state to intercept the escape key like insert-state does:
+  ;; Redefine emacs state to intercept the escape key like insert-state does
   (setq evil-insert-state-map (make-sparse-keymap))
   (define-key evil-insert-state-map (kbd "C-[") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
 #+END_SRC
 ** Evil-org
-Uses evil-like keybindings for Org-mode.
+Uses evil-like keybindings for =org-mode=.
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/.emacs.d/plugins/evil-org-mode")
   (require 'evil-org)
@@ -694,7 +695,7 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
    ?\] '("[ " . " ]")
    ?\} '("{ " . " }"))
 #+END_SRC
-* Org mode
+* =org-mode=
 ** Core
 *** Default keybindings
   #+BEGIN_SRC emacs-lisp
@@ -796,10 +797,8 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
  #+BEGIN_SRC emacs-lisp
  (setq org-confirm-babel-evaluate nil)
  #+END_SRC
-*** Org \LaTeX preview
+*** Org LaTeX preview
  #+BEGIN_SRC emacs-lisp
-   ;(setq org-preview-latex-default-process 'imagemagick)
-   ;(setq org-preview-latex-default-process 'dvipng)
    (setq org-latex-create-formula-image-program 'imagemagick)
  #+END_SRC
 *** TODO Org table swap cells
@@ -891,15 +890,6 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
 
 
  #+END_SRC
-*** Org-ac
-#+BEGIN_SRC emacs-lisp
-  ;(require 'org-ac)
-
-  ;; Make config suit for you. About the config item, eval the following sexp.
-  ;; (customize-group "org-ac")
-
-  ;(org-ac/config-default)
-#+END_SRC
 *** Org-babel
   #+BEGIN_SRC emacs-lisp
     ;; Load languages
@@ -921,10 +911,8 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
     ;; Remove the need to confirm evaluation of each code block
     (setq org-confirm-babel-evaluate nil)
 
-    ;; Customize default behavior of org-mode code blocks
-    ;; so that they can be used to display examples of
-    ;; org-mode syntax
-    ;(setf org-babel-default-header-args:org '((:exports . "code")))
+    ;; Customize default behavior of org-mode code blocks so that they can be
+    ;; used to display examples of org-mode syntax
 
     ;; Source code syntax highlighting
     (setq org-src-fontify-natively t)
@@ -954,34 +942,35 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
 
 
     ;; Custom ox-ipynb (John Kitchin)
-    ;(setq ox-ipynb "/home/zdm/Programming/Emacs/Elisp/ox-ipynb.el")
     (add-to-list 'load-path "~/Programming/Emacs/Elisp")
     (load "~/Programming/Emacs/Elisp/ox-ipynb.el")
     (require 'ox-ipynb)
   #+END_SRC
 *** Org-bookmark-heading
 Use to bookmark headings in org-mode
+
 #+BEGIN_SRC emacs-lisp
-(require 'org-bookmark-heading)
+  (require 'org-bookmark-heading)
 #+END_SRC
 *** Org-bullets
- Single bullets for Org-mode
+ Single bullets for =org-mode=
+
  #+BEGIN_SRC emacs-lisp
+   (require 'org-bullets)
+   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
-    (require 'org-bullets)
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-    ;; Org-bullets symbol customization:
+   ;; Org-bullets symbol customization
    ; (setq org-bullets-face-name (quote org-bullet-face))
-   (setq org-bullets-bullet-list '("*" "*" "*" "*"))
+
    ;; Default
    ; (setq org-bullets-bullet-list '("◉" "○" "●" "✸"))
+
+   ;; Single asterisk heading bullets
+   (setq org-bullets-bullet-list '("*" "*" "*" "*"))
+
+   ;; Remove bullets
+   ;(setq org-bullets-bullet-list '("   " "   " "   " "   "))
  #+END_SRC
-**** Remove bullets
-  A cleaner option that removes bullets and instead uses spaces. Using different colors for each subheading makes it easy to identify subheadings quickly
-  #+BEGIN_SRC emacs-lisp
-  ;(setq org-bullets-bullet-list '("   " "   " "   " "   "))
-  #+END_SRC
 *** Org-crypt
  For Org mode files, use this as the first line in the file:
  =# -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*-=
@@ -1021,13 +1010,6 @@ Sets default inline image width smaller to view in frame
 *** Org-ref
 **** Base setup
   #+BEGIN_SRC emacs-lisp
-    ;(setq org-latex-pdf-process
-    ;      '("pdflatex -interaction nonstopmode -output-directory %o %f"
-    ;        "bibtex %b"
-    ;        "pdflatex -interaction nonstopmode -output-directory %o %f"
-    ;        "pdflatex -interaction nonstopmode -output-directory %o %f")
-    ;)
-
     (require 'org-ref)
     (require 'org-ref-wos)
     (require 'org-ref-scopus)
@@ -1088,19 +1070,19 @@ Sets default inline image width smaller to view in frame
 
  #+END_SRC
 *** Logging TODO items
-**** =C-c C-x C-s= to mark a todo as done and archive it
+**** =C-c C-x C-s= to mark a =TODO= as done and archive it
 #+BEGIN_SRC emacs-lisp
-(defun mark-done-and-archive ()
-  "Mark the state of an org-mode item as DONE and archive it."
-  (interactive)
-  (org-todo 'done)
-  (org-archive-subtree))
+  (defun mark-done-and-archive ()
+    "Mark the state of an org-mode item as DONE and archive it."
+    (interactive)
+    (org-todo 'done)
+    (org-archive-subtree))
 
-(define-key org-mode-map (kbd "C-c C-x C-s") 'mark-done-and-archive)
+  (define-key org-mode-map (kbd "C-c C-x C-s") 'mark-done-and-archive)
 #+END_SRC
-**** Record the time that a todo was archived
+**** Record the time that a =TODO= was archived
 #+BEGIN_SRC emacs-lisp
-(setq org-log-done 'time)
+  (setq org-log-done 'time)
 #+END_SRC
 *** Miscellaneous
 #+BEGIN_SRC emacs-lisp
@@ -1110,7 +1092,7 @@ Sets default inline image width smaller to view in frame
   ;; Custom org-mode functions
 
   (defun zdm-org-surround (marker)
-    "Macro to surround a single word with 'marker'."
+    "Macro to surround a single word with MARKER."
     (interactive)
     (save-excursion
       (skip-chars-backward "-_[:alnum:]")
@@ -1162,7 +1144,7 @@ Courtesy of HRS
   (interactive)
   (insert-random-string 30))
 #+END_SRC
-* Ledger mode
+* =ledger-mode=
 #+BEGIN_SRC emacs-lisp
   (use-package ledger-mode
     :ensure t
@@ -1182,7 +1164,7 @@ To define a new abbrev:
 #+BEGIN_SRC emacs-lisp
 (setq-default abbrev-mode nil)
 
-;; Only on for Org-mode
+;; Only on for org-mode
 (add-hook 'org-mode-hook (lambda () (abbrev-mode t)))
 (abbrev-mode nil)
 
@@ -1194,7 +1176,6 @@ To define a new abbrev:
 #+END_SRC
 ** Ace jump
 #+BEGIN_SRC emacs-lisp
-  ;(add-to-list 'load-path "~/.emacs.d/elpa/ace-jump-mode-20140616/ace-jump-mode.el")
   (autoload 'ace-jump-mode "ace-jump-mode" "Emacs quick move minor mode" t)
 
   ;; You can select the key you prefer to
@@ -1287,7 +1268,7 @@ Use =C-x /= prefix followed by assigned keybinding to call.
   ;(md4rd)
 #+END_SRC
 ** Greek letters
-Enter Greek letters directly into buffer. Sometimes useful in org instead of \LaTeX commands.
+Enter Greek letters directly into buffer. Sometimes useful in =org-mode= instead of LaTeX commands.
 
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "M-g a") "α")
@@ -1427,7 +1408,7 @@ Enter Greek letters directly into buffer. Sometimes useful in org instead of \La
 - End macro: =f4= or =C-x )=
 - Name macro: =M-x name-last-kbd-macro=
 - Paste macro into .emacs: =M-x insert-kbd-macro RET <macro-name> RET=
-*** Org-mode
+*** =Org-mode=
 **** *Bold* word at point
 #+BEGIN_SRC emacs-lisp
 (fset 'evil-org-bold-word
