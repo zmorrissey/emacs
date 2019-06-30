@@ -207,4 +207,4 @@
 
 ;; Customize-variable settings
 (setq custom-file "~/.emacs.d/custom.el")
-; (load custom-file) ; if desired to load
+;(load custom-file) ; if desired to load

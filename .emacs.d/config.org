@@ -338,11 +338,10 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
 
 ** Themes
 
-Clear other theme settings before using =load-theme=.
+Clear previous theme settings first to avoid conflicts.
 
 #+BEGIN_SRC emacs-lisp
-  (defadvice load-theme (before clear-previous-themes activate)
-    "Clear existing theme settings instead of layering them"
+  (defadvice load-theme (before theme-dont-propagate activate)
     (mapc #'disable-theme custom-enabled-themes))
 #+END_SRC
 *** Solarized
