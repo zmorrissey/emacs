@@ -325,13 +325,13 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
   (setq scroll-step 1)  ; keyboard scroll one line at a time
   (scroll-bar-mode -1)  ; disable scroll bar
 #+END_SRC
-** Startup screen
-Display /About Emacs/ buffer on startup.
+** Startup
 
 #+BEGIN_SRC emacs-lisp
-  (setq inhibit-startup-screen nil)
-  ;(setq initial-buffer-choice about-emacs)
+  (setq inhibit-startup-screen t)
 
+  (setq initial-scratch-message
+        ";;; Blessed art thou, who hath come to the One True Editor.")
 #+END_SRC
 
 ** Themes
