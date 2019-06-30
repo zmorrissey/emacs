@@ -1457,6 +1457,9 @@ Convert plain list to checkboxes. Call with C-u prefix for # of lines
 ** Palimpsest mode
 Enter keybinding to move selected text to the bottom of the current buffer. Useful for prose text that you don't need but don't want to delete yet.
 
+- =C-c C-R=: Move region to bottom
+- =C-c C-q=: Move region to trash
+
 #+BEGIN_SRC emacs-lisp
   (add-hook 'text-mode-hook 'palimpsest-mode)
 #+END_SRC
