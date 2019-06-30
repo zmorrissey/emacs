@@ -345,8 +345,6 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
 
 *** Zenburn
 
-The one true Emacs theme.
-
 #+BEGIN_SRC emacs-lisp
   (load-theme 'zenburn t)
 #+END_SRC
