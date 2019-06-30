@@ -173,6 +173,8 @@
   :ensure t)
 (use-package org-ref
   :ensure t)
+(use-package palimpsest
+  :ensure t)
 (use-package pdf-tools
   :ensure t
   :config
@@ -204,3 +206,7 @@
 
 (org-babel-load-file "~/.emacs.d/config.org")
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; Customize-variable settings
+(setq custom-file "~/.emacs.d/custom.el")
+; (load custom-file) ; if desired to load

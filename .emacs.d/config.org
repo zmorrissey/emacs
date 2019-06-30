@@ -1,6 +1,6 @@
 #+TITLE: Emacs configuration
 #+DATE:
-#+AUTHOR: Zachery D. Morrissey
+#+AUTHOR:
 #+STARTUP: indent
 
 * Utility functions
@@ -106,7 +106,7 @@ For custom-made functions
 ** Cursor
 
 #+BEGIN_SRC emacs-lisp
-  (blink-cursor-mode nil)
+  (blink-cursor-mode -1)
 #+END_SRC
 
 ** Delimiters
