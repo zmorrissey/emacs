@@ -1180,17 +1180,17 @@ To define a new abbrev:
   - Example: =t h e C-x a g t e h RET=
 
 #+BEGIN_SRC emacs-lisp
-(setq-default abbrev-mode nil)
+  (setq-default abbrev-mode -1)
 
-;; Only on for org-mode
-(add-hook 'org-mode-hook (lambda () (abbrev-mode t)))
-(abbrev-mode nil)
+  ;; Only on for org-mode
+  ; (add-hook 'org-mode-hook (lambda () (abbrev-mode t)))
+  (abbrev-mode -1)
 
-;; Disable abbrev-mode in minibuffer
-(defun conditionally-disable-abbrev ()
-      (abbrev-mode nil))
+  ;; Disable abbrev-mode in minibuffer
+  (defun conditionally-disable-abbrev ()
+        (abbrev-mode nil))
 
-(add-hook 'minibuffer-setup-hook 'conditionally-disable-abbrev)
+  (add-hook 'minibuffer-setup-hook 'conditionally-disable-abbrev)
 #+END_SRC
 ** Ace jump
 #+BEGIN_SRC emacs-lisp
