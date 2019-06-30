@@ -45,7 +45,7 @@ For custom-made functions
     (find-file "~/Programming/Python/Scripts/test.py"))
 
   (defun zdm-create-R-test ()
-    "Create blank python file"
+    "Create blank R file"
     (interactive)
     (find-file "~/Programming/R/Scripts/test.R"))
 
@@ -187,7 +187,7 @@ For delimiter management.
 
 #+END_SRC
 ** Fonts
-Currently, using =DejaVus Sans Mono=.
+Currently, using =DejaVu Sans Mono=.
 
 #+BEGIN_SRC emacs-lisp
   (set-frame-font "-PfEd-DejaVu Sans Mono-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
