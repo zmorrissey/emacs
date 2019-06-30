@@ -20,8 +20,7 @@
   :ensure t
   :mode "\\.js\\'")
 (use-package ace-jump-mode
-  :ensure t
-  :disabled)
+  :ensure t)
 (use-package alert
   :ensure t)
 (use-package all-the-icons
@@ -142,7 +141,8 @@
 (use-package helm-swoop
   :ensure t)
 (use-package interleave
-  :ensure t)
+  :ensure t
+  :init (require 'interleave))
 (use-package magit
   :ensure t)
 (use-package markdown-mode
@@ -204,39 +204,3 @@
 
 (org-babel-load-file "~/.emacs.d/config.org")
 (put 'dired-find-alternate-file 'disabled nil)
-
-;(defalias 'outline-show-all 'show-all) ; fix for Emacs 24
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode nil)
- '(desktop-save-mode nil)
- '(global hl-line-mode t)
- '(gud-tooltip-mode t)
- '(inhibit-startup-screen nil)
- '(org-agenda-files
-   (quote
-    ("~/Lab/Notebook/leow-lab.org" "~/Documents/Personal/personal.org" "~/UIC/Logistics/grad-school.org")))
- '(org-pomodoro-finished-sound
-   "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
- '(org-pomodoro-long-break-sound
-   "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
- '(org-pomodoro-short-break-sound
-   "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
- '(org-pomodoro-start-sound
-   "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
- '(package-selected-packages
-   (quote
-    (eyebrowse markdown-mode ess-smart-underscore ess nov md4rd slime zenburn-theme writeroom-mode which-key use-package sublimity solarized-theme smartparens realgud rainbow-delimiters org-ac org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading ob-ipython nlinum neotree minimap matlab-mode magit ledger-mode interleave helm-swoop helm-projectile helm-dictionary go gnugo git-gutter-fringe frame-cmds exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader epc engine-mode elpy ein doom-themes docker discover dired+ diminish diff-hl dictionary csv-mode browse-kill-ring anchored-transpose)))
- '(scroll-bar-mode nil)
- '(smartparens-global-mode t)
- '(tool-bar-mode nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:foreground "#DCDCCC" :background "#3F3F3F"))))
- '(linum ((t (:inherit default)))))
