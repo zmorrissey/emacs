@@ -3,6 +3,8 @@
 #+AUTHOR:
 #+STARTUP: indent
 
+Custom =org-mode= file to load Emacs configurations.
+
 * Utility functions
 For custom-made functions
 ** TODO Org-ref sort all citations by date
@@ -536,14 +538,13 @@ Make tabs/spaces consistent across modes.
   #+END_SRC
 *** RefTeX + Org-mode
  #+BEGIN_SRC emacs-lisp
- (defun org-mode-reftex-setup ()
- (load-library "reftex")
- (and (buffer-file-name)
- (file-exists-p (buffer-file-name))
- (reftex-parse-all))
- (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
- )
- (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+   (defun org-mode-reftex-setup ()
+   (load-library "reftex")
+   (and (buffer-file-name)
+   (file-exists-p (buffer-file-name))
+   (reftex-parse-all))
+   (define-key org-mode-map (kbd "C-c )") 'reftex-citation))
+   (add-hook 'org-mode-hook 'org-mode-reftex-setup)
  #+END_SRC
 * Evil mode
 ** Custom functions
@@ -557,9 +558,9 @@ Make tabs/spaces consistent across modes.
 #+END_SRC
 ** Packages
 #+BEGIN_SRC emacs-lisp
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+  (package-initialize)
 #+END_SRC
 ** Leader key
 Needs to be enabled before evil, otherwise it won't be enabled in initial buffers.
@@ -1016,11 +1017,6 @@ Sets default inline image width smaller to view in frame
   ;; code block
 
   (add-hook 'org-babel-after-execute-hook 'org-redisplay-inline-images)
-#+END_SRC
-*** Org-pomodoro
-#+BEGIN_SRC emacs-lisp
-  ;; Change org-pomodoro alarm sound
-  ;(setq org-pomodoro-start-sound "/home/zdm/.emacs.d/elpa/org-pomodoro-20171108.1314/resources/tick.wav")
 #+END_SRC
 *** Org-ref
 **** Base setup
