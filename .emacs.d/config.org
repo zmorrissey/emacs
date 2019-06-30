@@ -194,7 +194,7 @@ Currently, using =DejaVus Sans Mono=.
 ** Frame
 *** Desktop save mode
 #+BEGIN_SRC emacs-lisp
-  (desktop-save-mode nil)
+  (desktop-save-mode -1)
 #+END_SRC
 *** Highlight current line
 
@@ -323,8 +323,17 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
   (setq mouse-wheel-progressive-speed nil)  ; don't accelerate scrolling
   (setq mouse-wheel-follow-mouse 't)  ; scroll window under mouse
   (setq scroll-step 1)  ; keyboard scroll one line at a time
-  (scroll-bar-mode nil)  ; keyboard scroll one line at a time
+  (scroll-bar-mode -1)  ; disable scroll bar
 #+END_SRC
+** Startup screen
+Display /About Emacs/ buffer on startup.
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-screen nil)
+  ;(setq initial-buffer-choice about-emacs)
+
+#+END_SRC
+
 ** Themes
 *** Solarized
 
@@ -694,6 +703,14 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
   (global-set-key "\C-cb" 'org-iswitchb)
   #+END_SRC
 ** Customizations
+*** Agenda files
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files
+        (quote
+         ("~/Lab/Notebook/leow-lab.org"
+          "~/Documents/Personal/personal.org"
+          "~/UIC/Logistics/grad-school.org")))
+#+END_SRC
 *** Blogging
 #+BEGIN_SRC emacs-lisp
     ;; Org publish variables
@@ -968,6 +985,7 @@ Use to bookmark headings in org-mode
  For Org mode files, use this as the first line in the file:
  =# -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*-=
  #+BEGIN_SRC emacs-lisp
+
  (require 'org-crypt)
  (org-crypt-use-before-save-magic)
  (setq org-tags-exclude-from-inheritance (quote ("crypt")))
