@@ -549,10 +549,21 @@ Make tabs/spaces consistent across modes.
 #+END_SRC
 ** TeX
 *** AucTeX
-  Configure for LaTex export with =minted=.
+**** Configure for LaTex export with =minted=.
   #+BEGIN_SRC emacs-lisp
     (setq LaTeX-command-style '(("" "%(PDF)%(latex) -shell-escape %S%(PDFout)")))
   #+END_SRC
+**** Use =pdf-tools= to view compile PDFs.
+
+#+BEGIN_SRC emacs-lisp
+  ;; Use pdf-tools to open PDF files
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-source-correlate-start-server t)
+
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+             #'TeX-revert-document-buffer)
+#+END_SRC
 *** RefTeX + =org-mode=
  #+BEGIN_SRC emacs-lisp
    (defun org-mode-reftex-setup ()
