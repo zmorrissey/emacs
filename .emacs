@@ -214,3 +214,5 @@
 ;; Customize-variable settings
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file) ; if desired to load
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
