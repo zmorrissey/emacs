@@ -139,6 +139,12 @@
 (use-package interleave
   :ensure t
   :init (require 'interleave))
+(use-package lorem-ipsum
+  :ensure t
+  :config
+  (global-set-key (kbd "C-c C-l s") 'lorem-ipsum-insert-sentences)
+  (global-set-key (kbd "C-c C-l p") 'lorem-ipsum-insert-paragraphs)
+  (global-set-key (kbd "C-c C-l l") 'lorem-ipsum-insert-list))
 (use-package magit
   :ensure t)
 (use-package markdown-mode
