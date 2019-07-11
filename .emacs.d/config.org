@@ -103,6 +103,13 @@ For custom-made functions
       (other-window 1)
       (switch-to-buffer w2)
       (other-window 1)))
+
+  (defun zdm-switch-hsplit-to-vsplit ()
+    "Convert two horizontal windows to two vertical windows."
+    (interactive)
+    (save-excursion
+      (delete-other-windows)
+      (display-buffer (other-buffer))))
 #+END_SRC
 * UI preferences
 ** Cursor
@@ -343,6 +350,7 @@ Clear previous theme settings first to avoid conflicts.
 #+BEGIN_SRC emacs-lisp
   (defadvice load-theme (before theme-dont-propagate activate)
     (mapc #'disable-theme custom-enabled-themes))
+
 #+END_SRC
 *** Solarized
 
@@ -518,6 +526,8 @@ Automatically make shell scripts executable upon save.
         (python-shell-completion-native-get-completions
          (get-buffer-process (current-buffer))
          nil "_"))))
+
+
 #+END_SRC
 *** ox-ipynb
 
@@ -541,11 +551,16 @@ Make tabs/spaces consistent across modes.
 #+BEGIN_SRC emacs-lisp
   (load "ess-site")
 
-  ;; Hook some useful programming minor modes
+  ;;; Hook some useful programming minor modes
   (add-hook 'ess-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'ess-mode-hook #'nlinum-mode)
 
   (setq ess-use-auto-complete nil)
+
+  ;;; Configure assignment key to ";" instead of "_"
+  (ess-toggle-underscore nil)
+  (define-key ess-r-mode-map ";" #'ess-insert-assign)
+  (define-key inferior-ess-r-mode-map ";" #'ess-insert-assign)
 #+END_SRC
 ** TeX
 *** AucTeX
@@ -618,6 +633,7 @@ Some custom evil-leader keymaps that I frequently use.
     "RET"   'eval-buffer
     "<SPC>" 'zdm-insert-literal-space
     "`"     'zdm-swap-windows
+    "~"     'zdm-switch-hsplit-to-vsplit
 
     ;; A-Z
     "B"     'ibuffer
@@ -975,6 +991,9 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
     (add-to-list 'load-path "~/Programming/Emacs/Elisp")
     (load "~/Programming/Emacs/Elisp/ox-ipynb.el")
     (require 'ox-ipynb)
+
+    ;;; Python command for org-babel
+    (setq org-babel-python-command "python3")
   #+END_SRC
 *** Org-bookmark-heading
 Use to bookmark headings in org-mode
