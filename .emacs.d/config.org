@@ -5,38 +5,9 @@
 
 Custom =org-mode= file to load Emacs configurations.
 
-* Utility functions
-For custom-made functions
-** TODO Org-ref sort all citations by date
-:OUTLINE:
-1. Move point to beginning of the document
-2. Search for the string =cite:=
-3. Move point to that string.
-4. Execute the command =org-ref-sort-citation-link=.
-5. Repeat steps 2-4 until the end of the document.
-:END:
-#+BEGIN_SRC emacs-lisp
-;  (defun org-ref-sort-citations ()	; Define a function
-;    "Sort all citations in an org document by date using org-ref" ;
-;   (push-mark) ; Save the current location so 'pop-global-mark' can return here
-;    (goto-char 0)				; Start at the top of the file
-;    (when (regexp-quote "cite:") ; Checks if it is true that the string "cite:" exists...
-;      ((re-search-forward "cite:") ; Go to the first occurrence of a citation
-;       (org-ref-sort-citation-links)) ; Sort citations oldest to newest using org-ref
-					  ; "When" will continue to next occurrence of "cite:" until false
+* Custom functions
+For custom-made functions.
 
-;      (t "Done")))      ; If there are no more occurrences, print "Done"
-
-
-
-  ;If regexp search match "cite:" is true,
-  ;goto next occurrence and execute org-ref command
-  ;
-  ;else,
-  ;return to push-mark
-
-#+END_SRC
-** Miscellaneous
 #+BEGIN_SRC emacs-lisp
   ;; Create test files in specific programming languages
   (defun zdm-create-py-test ()
