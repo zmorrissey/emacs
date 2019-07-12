@@ -236,20 +236,8 @@ Some functions for detecting frame size on startup and for resizing frames.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'prog-mode-hook 'nlinum-mode t)
 #+END_SRC
-*** Theme
-#+BEGIN_SRC emacs-lisp
-  ;(defun my-tone-down-fringes ()
-  ;  ;; Set fringe color to match background color of theme
-  ;  (set-face-attribute 'fringe nil
-  ;                      :foreground (face-background 'default)
-  ;                      :background (face-background 'default)))
-  ;
-  ;(my-tone-down-fringes)
-  ;  (add-hook 'emacs-startup-hook 'my-tone-down-fringes)
-#+END_SRC
 ** Menu bar
 #+BEGIN_SRC emacs-lisp
-  ;; Turn off menu bar by default
   (setq menu-bar-mode nil)
 #+END_SRC
 
@@ -262,15 +250,15 @@ Some functions for detecting frame size on startup and for resizing frames.
 Specifies extraneous modes to either hide or abbreviate to reduce clutter from the modeline.
 #+BEGIN_SRC emacs-lisp
   (require 'diminish)
-  ;; Hide from mode line
+
+  ;;; Hide from mode line
   (diminish 'which-key-mode)
   (diminish 'abbrev-mode)
   (diminish 'undo-tree-mode)
   (diminish 'visual-line-mode)
   (diminish 'smartparens-mode)
   (diminish 'org-indent-mode)
-  (diminish 'palimpsest-mode "Plmpst")
-  (diminish 'abbrev-mode "Abv")
+  (diminish 'palimpsest-mode)
   (diminish 'org-mode)
   (diminish 'evil-org-mode)
   (diminish 'auto-complete-mode)
@@ -298,7 +286,6 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
 #+END_SRC
 ** Scrolling
 #+BEGIN_SRC emacs-lisp
-  ;; Adjust scrolling parameters
   (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
   (setq mouse-wheel-progressive-speed nil)
   (setq mouse-wheel-follow-mouse 't)
@@ -310,6 +297,7 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-screen t)
 
+  ;; Receive a blessing every time you start Emacs
   (setq initial-scratch-message
         ";;; Blessed art thou, who hath come to the One True Editor.\n\n")
 #+END_SRC
@@ -366,8 +354,7 @@ Clear previous theme settings first to avoid conflicts.
 Automatically make shell scripts executable upon save.
 
 #+BEGIN_SRC emacs-lisp
-   (add-hook 'after-save-hook
-      'executable-make-buffer-file-executable-if-script-p)
+  (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 #+END_SRC
 ** C
 *** Cc-mode
@@ -450,7 +437,6 @@ Automatically make shell scripts executable upon save.
   (elpy-enable)
 
   ;; Use python3 with ipython
-  ;;(setq elpy-rpc-python-command "python3")
   (setq elpy-rpc-python-command "/home/zdm/anaconda3/bin/python3")
   (setq elpy-syntax-check-command "/home/zdm/anaconda3/bin/flake8")
   (setq python-shell-interpreter "/home/zdm/anaconda3/bin/ipython"
@@ -469,7 +455,6 @@ Automatically make shell scripts executable upon save.
 #+END_SRC
 *** Delete trailing whitespace when saving file
 #+BEGIN_SRC emacs-lisp
-  ;; Before save
   (add-hook 'before-save-hook
             (lambda ()
               (when 'elpy-mode
@@ -480,7 +465,7 @@ Automatically make shell scripts executable upon save.
 #+BEGIN_SRC emacs-lisp
   (add-hook 'elpy-mode-hook 'hs-minor-mode)
 #+END_SRC
-*** ipython and jupyter in org-mode
+*** IPython and jupyter in org-mode
 
 #+BEGIN_SRC emacs-lisp
   ;; Hack to execute ipython src blocks in org-mode
@@ -561,7 +546,7 @@ Make tabs/spaces consistent across modes.
 
    (add-hook 'org-mode-hook 'org-mode-reftex-setup)
  #+END_SRC
-* =evil-mode=
+* Evil-mode
 ** Custom functions
 #+BEGIN_SRC emacs-lisp
   (defun evil-newline ()
@@ -629,6 +614,7 @@ Some custom evil-leader keymaps that I frequently use.
     "g"     'magit-status
     "h"     'split-window-below
     "i"     'package-install
+    "j"     'ace-jump-word-mode
     "k"     'kill-buffer
     "l"     'evil-org-open-links
     "m"     'helm-bookmarks
@@ -712,7 +698,7 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
    ?\] '("[ " . " ]")
    ?\} '("{ " . " }"))
 #+END_SRC
-* =org-mode=
+* Org-mode
 ** Core
 *** Default keybindings
   #+BEGIN_SRC emacs-lisp
@@ -1368,7 +1354,6 @@ Enter Greek letters directly into buffer. Sometimes useful in =org-mode= instead
 #+END_SRC
 *** Helm-projectile
 #+BEGIN_SRC emacs-lisp
-;; (setq helm-projectile-fuzzy-match nil)
 (require 'helm-projectile)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
