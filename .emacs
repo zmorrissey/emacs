@@ -1,4 +1,5 @@
 ;; Install use-package for loading packages
+(setq inhibit-x-resources t)
 (setq debug-on-error t)
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -193,7 +194,16 @@
 (use-package slime
   :ensure t)
 (use-package solarized-theme
-  :ensure t)
+  :ensure t
+  :init
+  (setq solarized-scale-org-headlines nil)
+  (setq solarized-use-variable-pitch nil)
+  (setq solarized-height-minus-1 1.0)
+  (setq solarized-height-plus-1 1.0)
+  (setq solarized-height-plus-2 1.0)
+  (setq solarized-height-plus-3 1.0)
+  (setq solarized-height-plus-4 1.0)
+  (load-theme 'solarized-light t))
 (use-package sublimity
   :ensure t
   :init
@@ -205,14 +215,14 @@
   (which-key-mode))
 (use-package writeroom-mode
   :ensure t)
-(use-package zenburn-theme
-  :ensure t)
+;(use-package zenburn-theme
+;  :ensure t)
 
 (org-babel-load-file "~/.emacs.d/config.org")
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; Customize-variable settings
 (setq custom-file "~/.emacs.d/custom.el")
-(load custom-file) ; if desired to load
+;(load custom-file) ; if desired to load
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)

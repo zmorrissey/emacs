@@ -198,7 +198,7 @@ Some functions for detecting frame size on startup and for resizing frames.
     "Set the frame's size to 80 (or prefix arg WIDTH) columns wide."
     (interactive "P")
     (if window-system
-	(set-frame-width (selected-frame) (or width 80))
+        (set-frame-width (selected-frame) (or width 80))
       (error "Cannot resize frame horizontally: is a text terminal")))
 
   (defun fix-window-horizontal-size (width)
@@ -210,12 +210,12 @@ Some functions for detecting frame size on startup and for resizing frames.
     "Set the window's or frame's width to 80 (or prefix arg WIDTH)."
     (interactive "P")
     (condition-case nil
-	(fix-window-horizontal-size width)
+        (fix-window-horizontal-size width)
       (error
        (condition-case nil
-	   (fix-frame-horizontal-size width)
-	 (error
-	  (error "Cannot resize window or frame horizontally"))))))
+           (fix-frame-horizontal-size width)
+         (error
+          (error "Cannot resize window or frame horizontally"))))))
 
   (global-set-key (kbd "C-x W") 'fix-horizontal-size)
 
@@ -226,7 +226,7 @@ Some functions for detecting frame size on startup and for resizing frames.
   (defun maximize-frame-width ()
     (interactive)
     (if window-system
-	(set-frame-width (selected-frame) 'calc-max-frame-width)))
+        (set-frame-width (selected-frame) 'calc-max-frame-width)))
 
   (global-set-key (kbd "C-x M") 'maximize-frame-width)
 #+END_SRC
@@ -310,24 +310,25 @@ Clear previous theme settings first to avoid conflicts.
   (defadvice load-theme (before theme-dont-propagate activate)
     (mapc #'disable-theme custom-enabled-themes))
 
+
 #+END_SRC
 *** Solarized
 
 #+BEGIN_SRC emacs-lisp
   ;; Don't change size of org-mode headlines (but keep other size-changes)
-  (setq solarized-scale-org-headlines nil)
+  ;(setq solarized-scale-org-headlines nil)
 
   ;; Don't change the font for some headings and titles
-  (setq solarized-use-variable-pitch nil)
+  ;(setq solarized-use-variable-pitch nil)
 
   ;; Avoid all font-size changes
-  (setq solarized-height-minus-1 1.0)
-  (setq solarized-height-plus-1 1.0)
-  (setq solarized-height-plus-2 1.0)
-  (setq solarized-height-plus-3 1.0)
-  (setq solarized-height-plus-4 1.0)
+  ;(setq solarized-height-minus-1 1.0)
+  ;(setq solarized-height-plus-1 1.0)
+  ;(setq solarized-height-plus-2 1.0)
+  ;(setq solarized-height-plus-3 1.0)
+  ;(setq solarized-height-plus-4 1.0)
 
-  (load-theme 'solarized-light t)
+  ;(load-theme 'solarized-light t)
 
 #+END_SRC
 *** Zenburn
