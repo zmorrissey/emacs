@@ -89,7 +89,7 @@
 (use-package ess
   :ensure t
   :init
-  (require 'ess-site))
+  (require 'ess))
 (use-package evil
   :ensure t)
 (use-package evil-leader

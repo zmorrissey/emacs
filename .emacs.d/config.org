@@ -517,6 +517,7 @@ Make tabs/spaces consistent across modes.
   (define-key ess-r-mode-map ";" #'ess-insert-assign)
   (define-key inferior-ess-r-mode-map ";" #'ess-insert-assign)
 
+
 #+END_SRC
 ** TeX
 *** AucTeX
@@ -650,6 +651,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'eww-mode-hook 'emacs)
   (evil-set-initial-state 'image-mode 'emacs)
   (evil-set-initial-state 'Info-mode 'emacs)
+  (evil-set-initial-state 'ess-mode 'emacs)
 #+END_SRC
 
 Make evil-mode insert state act more like native Emacs.
