@@ -504,10 +504,8 @@ Make tabs/spaces consistent across modes.
           (setq-default python-indent 4)))
 #+END_SRC
 ** R
-*** ESS for working with R in Emacs
+*** Emacs Speaks Statistics (ESS)
 #+BEGIN_SRC emacs-lisp
-  (load "ess-site")
-
   ;;; Hook some useful programming minor modes
   (add-hook 'ess-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'ess-mode-hook #'nlinum-mode)
@@ -515,9 +513,10 @@ Make tabs/spaces consistent across modes.
   (setq ess-use-auto-complete nil)
 
   ;;; Configure assignment key to ";" instead of "_"
-  (ess-toggle-underscore nil)
+  ;;; (Press ";" again to get the semicolon symbol)
   (define-key ess-r-mode-map ";" #'ess-insert-assign)
   (define-key inferior-ess-r-mode-map ";" #'ess-insert-assign)
+
 #+END_SRC
 ** TeX
 *** AucTeX

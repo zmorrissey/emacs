@@ -88,10 +88,8 @@
   :ensure t)
 (use-package ess
   :ensure t
-  :config
+  :init
   (require 'ess-site))
-(use-package ess-smart-underscore
-  :ensure t)
 (use-package evil
   :ensure t)
 (use-package evil-leader
