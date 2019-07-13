@@ -176,19 +176,7 @@ Currently, using =DejaVu Sans Mono=.
 #+BEGIN_SRC emacs-lisp
   (desktop-save-mode -1)
 #+END_SRC
-*** Highlight current line
-
-#+BEGIN_SRC emacs-lisp
-  (global-hl-line-mode t)
-#+END_SRC
-*** Visual line mode
-
-Don't wrap words at end of line.
-
- #+BEGIN_SRC emacs-lisp
- (global-visual-line-mode 1)
- #+END_SRC
-** Frame resizing
+*** Frame resizing
 
 Some functions for detecting frame size on startup and for resizing frames.
 
@@ -228,8 +216,20 @@ Some functions for detecting frame size on startup and for resizing frames.
     (if window-system
         (set-frame-width (selected-frame) 'calc-max-frame-width)))
 
-  (global-set-key (kbd "C-x M") 'maximize-frame-width)
+  (global-set-key (kbd "C-x M") 'toggle-frame-maximized)
 #+END_SRC
+*** Highlight current line
+
+#+BEGIN_SRC emacs-lisp
+  (global-hl-line-mode t)
+#+END_SRC
+*** Visual line mode
+
+Don't wrap words at end of line.
+
+ #+BEGIN_SRC emacs-lisp
+ (global-visual-line-mode 1)
+ #+END_SRC
 ** Fringe
 *** Line numbers
 
@@ -651,7 +651,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'eww-mode-hook 'emacs)
   (evil-set-initial-state 'image-mode 'emacs)
   (evil-set-initial-state 'Info-mode 'emacs)
-  (evil-set-initial-state 'ess-mode 'emacs)
+  (evil-set-initial-state 'inferior-ess-mode 'emacs)
 #+END_SRC
 
 Make evil-mode insert state act more like native Emacs.
