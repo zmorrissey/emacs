@@ -1102,11 +1102,18 @@ Sets default inline image width smaller to view in frame
 #+END_SRC
 *** Miscellaneous
 #+BEGIN_SRC emacs-lisp
-  ;; Put captions for tables above the table (APA style)
+  ;;; Put captions for tables above the table (APA style)
   (setq org-latex-table-caption-above t)
 
-  ;; Custom org-mode functions
 
+  ;;; Customize org-verbatim regular expression
+  ;;; original setting:
+  ;;; ("  ('\"{" "-       .,:!?;'\")}\\" "        \n,\"'" "." 1)
+  (setcar (nthcdr 2 org-emphasis-regexp-components) " \t\r\n")
+  (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+
+
+  ;;; Custom org-mode functions
   (defun zdm-org-surround (marker)
     "Macro to surround a single word with MARKER."
     (interactive)
@@ -1537,7 +1544,7 @@ Used for autocompletion of templates (similar to =abbrev-mode=, but for programm
 #+END_SRC
 ** Wrap region
 
-Similar to Evil-mode's =evil-surround= package while in Emacs state. Default wrappers include \verbatim{"}, \verbatim{'}, =(=, ={=, and =[=.
+Similar to Evil-mode's =evil-surround= package while in Emacs state. Default wrappers include =,=, ="=, =(=, ={=, =[=.
 
 #+BEGIN_SRC emacs-lisp
   ;;; Enable wrap-region mode upon entering emacs state, disable in evil-mode
