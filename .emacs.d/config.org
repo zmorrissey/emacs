@@ -81,6 +81,13 @@ For custom-made functions.
     (save-excursion
       (delete-other-windows)
       (display-buffer (other-buffer))))
+
+  (autoload 'zap-up-to-char "misc"
+    "Kill up to, but not including ARGth occurrence of CHAR.
+    \(fn arg char)"
+    'interactive)
+
+  (global-set-key "\M-Z" 'zap-up-to-char)
 #+END_SRC
 * UI preferences
 ** Cursor
