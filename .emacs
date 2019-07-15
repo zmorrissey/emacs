@@ -213,6 +213,8 @@
   (which-key-mode))
 (use-package writeroom-mode
   :ensure t)
+(use-package wrap-region
+  :ensure t)
 ;(use-package zenburn-theme
 ;  :ensure t)
 

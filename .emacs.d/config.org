@@ -659,6 +659,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'image-mode 'emacs)
   (evil-set-initial-state 'Info-mode 'emacs)
   (evil-set-initial-state 'inferior-ess-mode 'emacs)
+  (evil-set-initial-state 'emacs-lisp-mode 'emacs)
 #+END_SRC
 
 Make evil-mode insert state act more like native Emacs.
@@ -1533,4 +1534,25 @@ Used for autocompletion of templates (similar to =abbrev-mode=, but for programm
 
 #+BEGIN_SRC emacs-lisp
   (yas-global-mode 1)
+#+END_SRC
+** Wrap region
+
+Similar to Evil-mode's =evil-surround= package while in Emacs state. Default wrappers include \verbatim{"}, \verbatim{'}, =(=, ={=, and =[=.
+
+#+BEGIN_SRC emacs-lisp
+  ;;; Enable wrap-region mode upon entering emacs state, disable in evil-mode
+  (add-hook 'evil-emacs-state-entry-hook 'wrap-region-mode)
+  (add-hook 'evil-mode-hook (lambda ()
+                              wrap-region-mode nil))
+
+  ;;; Custom wrapping symbols
+  (wrap-region-add-wrapper "$" "$")  ; LaTeX inline math
+  (wrap-region-add-wrapper "=" "=")  ; org-verbatim
+  (wrap-region-add-wrapper "*" "*")  ; org-bold
+  (wrap-region-add-wrapper "_" "_")  ; org-underline
+  (wrap-region-add-wrapper "/" "/")  ; org-emphasize
+
+  ;;; In case of conflicts with certain modes, add to the following
+  ;(add-to-list 'wrap-region-except-modes 'conflicting-mode)
+
 #+END_SRC
