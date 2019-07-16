@@ -9,7 +9,7 @@ Custom =org-mode= file to load Emacs configurations.
 For custom-made functions.
 
 #+BEGIN_SRC emacs-lisp
-  ;; Create test files in specific programming languages
+  ;;; Create test files in specific programming languages
   (defun zdm-create-py-test ()
     "Create blank python file"
     (interactive)
@@ -20,6 +20,10 @@ For custom-made functions.
     (interactive)
     (find-file "~/Programming/R/Scripts/test.R"))
 
+  (defun zdm-create-org-test ()
+    "Create blank org file"
+    (interactive)
+    (find-file "~/Programming/Emacs/test.org"))
 
   (defun zdm-pdb ()
     "Quickly load realgud if it hasn't been already, enter pdb"
@@ -88,6 +92,12 @@ For custom-made functions.
     'interactive)
 
   (global-set-key "\M-Z" 'zap-up-to-char)
+
+  (defun zdm-open-agenda-files ()
+    "Open all agenda files in ORG-AGENDA-FILES."
+    (interactive)
+    (dolist (f org-agenda-files)
+      (find-file f)))
 #+END_SRC
 * UI preferences
 ** Cursor
@@ -960,7 +970,7 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
     (require 'ox-ipynb)
 
     ;;; Python command for org-babel
-    (setq org-babel-python-command "python3")
+    (setq org-babel-python-command "/home/zdm/anaconda3/bin/python3")
   #+END_SRC
 *** Org-bookmark-heading
 Use to bookmark headings in org-mode
@@ -1552,6 +1562,7 @@ Similar to Evil-mode's =evil-surround= package while in Emacs state. Default wra
   (add-hook 'evil-mode-hook (lambda ()
                               wrap-region-mode nil))
 
+
   ;;; Custom wrapping symbols
   (wrap-region-add-wrapper "$" "$")  ; LaTeX inline math
   (wrap-region-add-wrapper "=" "=")  ; org-verbatim
@@ -1560,6 +1571,6 @@ Similar to Evil-mode's =evil-surround= package while in Emacs state. Default wra
   (wrap-region-add-wrapper "/" "/")  ; org-emphasize
 
   ;;; In case of conflicts with certain modes, add to the following
-  ;(add-to-list 'wrap-region-except-modes 'conflicting-mode)
+  (add-to-list 'wrap-region-except-modes 'ibuffer-mode)
 
 #+END_SRC
