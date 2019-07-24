@@ -672,6 +672,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'emacs-lisp-mode 'emacs)
   (evil-set-initial-state 'ein:notebooklist-mode 'emacs)
   (evil-set-initial-state 'ein:notebook-mode 'emacs)
+  (evil-set-initial-state 'inferior-python-mode 'emacs)
 #+END_SRC
 
 Make evil-mode insert state act more like native Emacs.
