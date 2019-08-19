@@ -86,6 +86,14 @@ For custom-made functions.
       (delete-other-windows)
       (display-buffer (other-buffer))))
 
+  (defun zdm-switch-vsplit-to-hsplit ()
+    "Convert two vertical windows to two horizontal windows."
+    (interactive)
+    (save-excursion
+      (delete-other-windows)
+      (display-buffer-at-bottom (other-buffer))))
+
+
   (autoload 'zap-up-to-char "misc"
     "Kill up to, but not including ARGth occurrence of CHAR.
     \(fn arg char)"
@@ -324,8 +332,8 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
 Clear previous theme settings first to avoid conflicts.
 
 #+BEGIN_SRC emacs-lisp
-  (defadvice load-theme (before theme-dont-propagate activate)
-    (mapc #'disable-theme custom-enabled-themes))
+  ;(defadvice load-theme (before theme-dont-propagate activate)
+  ;  (mapc #'disable-theme custom-enabled-themes))
 
 
 #+END_SRC

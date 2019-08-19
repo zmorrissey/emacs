@@ -69,8 +69,6 @@
   :ensure t)
 (use-package dired+
   :ensure t)
-(use-package doom-themes
-  :ensure t)
 (use-package ein
   :ensure t
   :config
@@ -125,7 +123,8 @@
 (use-package goto-chg
   :ensure t)
 (use-package helm
-  :ensure helm-core)
+  ;;:ensure helm-core)
+  :ensure t)
 (use-package helm-bibtex
   :ensure t
   :commands helm-bibtex)
@@ -193,7 +192,7 @@
   :ensure t)
 (use-package solarized-theme
   :ensure t
-  :init
+  :config
   (setq solarized-scale-org-headlines nil)
   (setq solarized-use-variable-pitch nil)
   (setq solarized-height-minus-1 1.0)
@@ -216,7 +215,9 @@
 (use-package wrap-region
   :ensure t)
 ;(use-package zenburn-theme
-;  :ensure t)
+;  :ensure t
+;  :config
+;  (load-theme 'zenburn t))
 
 (org-babel-load-file "~/.emacs.d/config.org")
 (put 'dired-find-alternate-file 'disabled nil)
