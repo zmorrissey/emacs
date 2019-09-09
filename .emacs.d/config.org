@@ -1110,7 +1110,8 @@ Sets default inline image width smaller to view in frame
 
   (add-to-list 'org-latex-classes
                     '("tufte-book"
-                      "\\documentclass{tufte-handout}"
+                      "\\documentclass{tufte-book}"
+                      ("\\chapter{%s}" . "\\chapter*{%s}")
                       ("\\section{%s}" . "\\section*{%s}")
                       ("\\subsection{%s}" . "\\subsection*{%s}")
                       ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
