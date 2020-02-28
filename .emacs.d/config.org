@@ -25,6 +25,11 @@ For custom-made functions.
     (interactive)
     (find-file "~/Programming/Emacs/test.org"))
 
+  (defun zdm-create-tex-test ()
+    "Create blank tex file"
+    (interactive)
+    (find-file "~/Programming/LaTeX/Scripts/test.tex"))
+
   (defun zdm-pdb ()
     "Quickly load realgud if it hasn't been already, enter pdb"
     (interactive)
@@ -263,7 +268,7 @@ Don't wrap words at end of line.
 #+END_SRC
 ** Menu bar
 #+BEGIN_SRC emacs-lisp
-  (setq menu-bar-mode nil)
+  ;(setq menu-bar-mode nil)
 #+END_SRC
 
 ** Mode line
@@ -1251,7 +1256,7 @@ To define a new abbrev:
   (define-key global-map (kbd "C-x SPC") 'ace-jump-word-mode)
 #+END_SRC
 ** Anchored transpose
-Tranposes a selected region of text around a specified anchor point. Select entire region to be transposed, enter =C-x t=, then select anchor region to tranpose the two regions around, then enter =C-x t= again to complete transpose.
+Tranposes a selected region of text around a specified anchor point. Select entire region to be transposed, enter =C-x t=, then select anchor region to transpose the two regions around, then enter =C-x t= again to complete transpose.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path "~/.emacs.d/elap/anchored-transpose-20080904.2254")
