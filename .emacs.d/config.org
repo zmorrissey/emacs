@@ -961,7 +961,11 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
     (add-to-list 'org-latex-packages-alist '("" "minted"))
     (setq org-latex-listings 'minted)
     (setq org-latex-minted-options
-          '(("frame" "lines") ("linenos=true")))
+          ;; Top and bottom frame lines, no background color
+          '(("breaklines" "true")("frame" "lines") ("linenos=true")))
+
+          ;; Gray background, no frame lines
+          ;;'(("breaklines" "true") ("bgcolor" "Snow2")))
 
     (setq org-latex-pdf-process
           '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
