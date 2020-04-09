@@ -296,6 +296,20 @@ Specifies extraneous modes to either hide or abbreviate to reduce clutter from t
   (put 'scroll-left 'disabled nil)
   (put 'dired-find-alternate-file 'disabled nil)
 #+END_SRC
+** Mouse
+Add keybindings for mouse forward and backward buttons to navigate buffers.
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "<mouse-8>") 'previous-buffer)  ; back button
+  (global-set-key (kbd "<mouse-9>") 'next-buffer)  ; forward button
+#+END_SRC
+
+When in PDF-tools, use forward/backward buttons to go to next/previous page.
+
+#+BEGIN_SRC emacs-lisp
+  (define-key pdf-view-mode-map (kbd "<mouse-8>") 'pdf-view-next-page)
+  (define-key pdf-view-mode-map (kbd "<mouse-9>") 'pdf-view-previous-page)
+#+END_SRC
 ** Neotree
 #+BEGIN_SRC emacs-lisp
   ;; Neotree toggle button
@@ -422,6 +436,11 @@ Automatically make shell scripts executable upon save.
   (autoload 'LilyPond-mode "lilypond-mode" "LilyPond Editing Mode" t)
   (add-to-list 'auto-mode-alist '("\\.ly$" . LilyPond-mode))
   (add-to-list 'auto-mode-alist '("\\.ily$" . LilyPond-mode))
+#+END_SRC
+** Lisp
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-<return>") 'eval-buffer)
 #+END_SRC
 ** Magit
 #+BEGIN_SRC emacs-lisp
@@ -691,6 +710,9 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'pdf-occur-global-minor-mode-hook 'emacs)
   (evil-set-initial-state 'pdf-occur-buffer-mode 'emacs)
   (evil-set-initial-state 'pdf-occur-buffer-mode-hook 'emacs)
+  (evil-set-initial-state 'scheme-mode 'emacs)
+  (evil-set-initial-state 'inferior-scheme-mode 'emacs)
+
 
 
 
@@ -969,8 +991,11 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
     (add-to-list 'org-latex-packages-alist '("" "minted"))
     (setq org-latex-listings 'minted)
     (setq org-latex-minted-options
-          ;; Top and bottom frame lines, no background color
-          '(("breaklines" "true")("frame" "lines") ("linenos=true")))
+          ;; Break long lines, top and bottom frame lines, no background color
+          ;;'(("breaklines" "true")("frame" "lines") ("linenos=true")))
+
+          ;;Top and bottom frame lines, no background color
+          '(("frame" "lines") ("linenos=true")))
 
           ;; Gray background, no frame lines
           ;;'(("breaklines" "true") ("bgcolor" "Snow2")))
