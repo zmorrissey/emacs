@@ -123,17 +123,10 @@
 (use-package goto-chg
   :ensure t)
 (use-package helm
-;  ;;:ensure helm-core)
   :ensure t)
 (use-package helm-bibtex
   :ensure t
   :commands helm-bibtex)
-;(use-package helm-dictionary
-;  :ensure t)
-;(use-package helm-projectile
-;  :ensure t)
-;(use-package helm-swoop
-;  :ensure t)
 (use-package interleave
   :ensure t
   :init (require 'interleave))
@@ -190,17 +183,6 @@
   (require 'smartparens-config))
 (use-package slime
   :ensure t)
-;(use-package solarized-theme
-;  :ensure t
-;  :config
-;  (setq solarized-scale-org-headlines nil)
-;  (setq solarized-use-variable-pitch nil)
-;  (setq solarized-height-minus-1 1.0)
-;  (setq solarized-height-plus-1 1.0)
-;  (setq solarized-height-plus-2 1.0)
-;  (setq solarized-height-plus-3 1.0)
-;  (setq solarized-height-plus-4 1.0)
-;  (load-theme 'solarized-light t))
 (use-package sublimity
   :ensure t
   :init
@@ -225,15 +207,7 @@
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; Customize-variable settings
-;(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file "~/.emacs.d/custom.el")
 ;(load custom-file) ; if desired to load
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files
-   (quote
-    ("~/Lab/Notebook/leow-lab.org" "~/Documents/Personal/personal.org" "~/UIC/Logistics/grad-school.org"))))
