@@ -111,6 +111,11 @@ For custom-made functions.
     (interactive)
     (dolist (f org-agenda-files)
       (find-file f)))
+
+  (defun zdm-insert-org-latex-header ()
+    "Insert LaTeX header template for org mode."
+    (interactive)
+    (insert "#+TITLE: Title\n#+AUTHOR: Zachery D. Morrissey\n#+DATE: \\today\n#+OPTIONS: toc:2\n#+LATEX_CLASS: tufte-handout\n#+LATEX_HEADER: \\usepackage{microtype}\n#+LATEX_HEADER: \\usepackage[altP,oldstyle]{fbb}\n#+LATEX_HEADER: \\usepackage{hyperref}\n#+LATEX_HEADER: \\definecolor{vermilion}{RGB}{227, 66, 52}\n#+LATEX_HEADER: \\definecolor{etred}{RGB}{220, 40, 40}\n#+LATEX_HEADER: \\usepackage[all]{nowidow}\n#+LATEX_HEADER: \\hypersetup{colorlinks=true, linkcolor=vermilion, citecolor=vermilion, urlcolor=vermilion, pdfkeywords={}, pdfsubject={}, pdfcreator={Emacs 25.3.2 (Org mode 8.2.10)}, linktocpage=true}\n#+STARTUP: indent\n#+EXCLUDE_TAGS:"))
 #+END_SRC
 * UI preferences
 ** Cursor
@@ -585,6 +590,15 @@ Make tabs/spaces consistent across modes.
   (add-hook 'TeX-after-compilation-finished-functions
              #'TeX-revert-document-buffer)
 #+END_SRC
+**** Reftex
+
+#+BEGIN_SRC emacs-lisp
+  ;;; Turn on RefTeX in AUCTeX
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+
+  ;;; Activate nice interface between RefTeX and AUCTeX
+  (setq reftex-plug-into-AUCTeX t)
+#+END_SRC
 *** RefTeX + =org-mode=
  #+BEGIN_SRC emacs-lisp
    (defun org-mode-reftex-setup ()
@@ -712,7 +726,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'pdf-occur-buffer-mode-hook 'emacs)
   (evil-set-initial-state 'scheme-mode 'emacs)
   (evil-set-initial-state 'inferior-scheme-mode 'emacs)
-
+  (evil-set-initial-state 'shell-mode 'emacs)
 
 
 
@@ -725,6 +739,8 @@ Make evil-mode insert state act more like native Emacs.
   (setq evil-insert-state-map (make-sparse-keymap))
   (define-key evil-insert-state-map (kbd "C-[") 'evil-normal-state)
   (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state)
+
+
 #+END_SRC
 ** Evil-org
 Uses evil-like keybindings for =org-mode=.
@@ -1376,56 +1392,56 @@ Use =C-x /= prefix followed by assigned keybinding to call.
 Enter Greek letters directly into buffer. Sometimes useful in =org-mode= instead of LaTeX commands.
 
 #+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "M-g a") "α")
-(global-set-key (kbd "M-g b") "β")
-(global-set-key (kbd "M-g g") "γ")
-(global-set-key (kbd "M-g d") "δ")
-(global-set-key (kbd "M-g e") "ε")
-(global-set-key (kbd "M-g z") "ζ")
-(global-set-key (kbd "M-g h") "η")
-(global-set-key (kbd "M-g q") "θ")
-(global-set-key (kbd "M-g i") "ι")
-(global-set-key (kbd "M-g k") "κ")
-(global-set-key (kbd "M-g l") "λ")
-(global-set-key (kbd "M-g m") "μ")
-(global-set-key (kbd "M-g n") "ν")
-(global-set-key (kbd "M-g x") "ξ")
-(global-set-key (kbd "M-g o") "ο")
-(global-set-key (kbd "M-g p") "π")
-(global-set-key (kbd "M-g r") "ρ")
-(global-set-key (kbd "M-g s") "σ")
-(global-set-key (kbd "M-g t") "τ")
-(global-set-key (kbd "M-g u") "υ")
-(global-set-key (kbd "M-g f") "ϕ")
-(global-set-key (kbd "M-g j") "φ")
-(global-set-key (kbd "M-g c") "χ")
-(global-set-key (kbd "M-g y") "ψ")
-(global-set-key (kbd "M-g w") "ω")
-(global-set-key (kbd "M-g A") "Α")
-(global-set-key (kbd "M-g B") "Β")
-(global-set-key (kbd "M-g G") "Γ")
-(global-set-key (kbd "M-g D") "Δ")
-(global-set-key (kbd "M-g E") "Ε")
-(global-set-key (kbd "M-g Z") "Ζ")
-(global-set-key (kbd "M-g H") "Η")
-(global-set-key (kbd "M-g Q") "Θ")
-(global-set-key (kbd "M-g I") "Ι")
-(global-set-key (kbd "M-g K") "Κ")
-(global-set-key (kbd "M-g L") "Λ")
-(global-set-key (kbd "M-g M") "Μ")
-(global-set-key (kbd "M-g N") "Ν")
-(global-set-key (kbd "M-g X") "Ξ")
-(global-set-key (kbd "M-g O") "Ο")
-(global-set-key (kbd "M-g P") "Π")
-(global-set-key (kbd "M-g R") "Ρ")
-(global-set-key (kbd "M-g S") "Σ")
-(global-set-key (kbd "M-g T") "Τ")
-(global-set-key (kbd "M-g U") "Υ")
-(global-set-key (kbd "M-g F") "Φ")
-(global-set-key (kbd "M-g J") "Φ")
-(global-set-key (kbd "M-g C") "Χ")
-(global-set-key (kbd "M-g Y") "Ψ")
-(global-set-key (kbd "M-g W") "Ω")
+  (define-key key-translation-map (kbd "M-g a") (kbd "α"))
+  (define-key key-translation-map (kbd "M-g b") (kbd "β"))
+  (define-key key-translation-map (kbd "M-g g") (kbd "γ"))
+  (define-key key-translation-map (kbd "M-g d") (kbd "δ"))
+  (define-key key-translation-map (kbd "M-g e") (kbd "ε"))
+  (define-key key-translation-map (kbd "M-g z") (kbd "ζ"))
+  (define-key key-translation-map (kbd "M-g h") (kbd "η"))
+  (define-key key-translation-map (kbd "M-g q") (kbd "θ"))
+  (define-key key-translation-map (kbd "M-g i") (kbd "ι"))
+  (define-key key-translation-map (kbd "M-g k") (kbd "κ"))
+  (define-key key-translation-map (kbd "M-g l") (kbd "λ"))
+  (define-key key-translation-map (kbd "M-g m") (kbd "μ"))
+  (define-key key-translation-map (kbd "M-g n") (kbd "ν"))
+  (define-key key-translation-map (kbd "M-g x") (kbd "ξ"))
+  (define-key key-translation-map (kbd "M-g o") (kbd "ο"))
+  (define-key key-translation-map (kbd "M-g p") (kbd "π"))
+  (define-key key-translation-map (kbd "M-g r") (kbd "ρ"))
+  (define-key key-translation-map (kbd "M-g s") (kbd "σ"))
+  (define-key key-translation-map (kbd "M-g t") (kbd "τ"))
+  (define-key key-translation-map (kbd "M-g u") (kbd "υ"))
+  (define-key key-translation-map (kbd "M-g f") (kbd "ϕ"))
+  (define-key key-translation-map (kbd "M-g j") (kbd "φ"))
+  (define-key key-translation-map (kbd "M-g c") (kbd "χ"))
+  (define-key key-translation-map (kbd "M-g y") (kbd "ψ"))
+  (define-key key-translation-map (kbd "M-g w") (kbd "ω"))
+  (define-key key-translation-map (kbd "M-g A") (kbd "Α"))
+  (define-key key-translation-map (kbd "M-g B") (kbd "Β"))
+  (define-key key-translation-map (kbd "M-g G") (kbd "Γ"))
+  (define-key key-translation-map (kbd "M-g D") (kbd "Δ"))
+  (define-key key-translation-map (kbd "M-g E") (kbd "Ε"))
+  (define-key key-translation-map (kbd "M-g Z") (kbd "Ζ"))
+  (define-key key-translation-map (kbd "M-g H") (kbd "Η"))
+  (define-key key-translation-map (kbd "M-g Q") (kbd "Θ"))
+  (define-key key-translation-map (kbd "M-g I") (kbd "Ι"))
+  (define-key key-translation-map (kbd "M-g K") (kbd "Κ"))
+  (define-key key-translation-map (kbd "M-g L") (kbd "Λ"))
+  (define-key key-translation-map (kbd "M-g M") (kbd "Μ"))
+  (define-key key-translation-map (kbd "M-g N") (kbd "Ν"))
+  (define-key key-translation-map (kbd "M-g X") (kbd "Ξ"))
+  (define-key key-translation-map (kbd "M-g O") (kbd "Ο"))
+  (define-key key-translation-map (kbd "M-g P") (kbd "Π"))
+  (define-key key-translation-map (kbd "M-g R") (kbd "Ρ"))
+  (define-key key-translation-map (kbd "M-g S") (kbd "Σ"))
+  (define-key key-translation-map (kbd "M-g T") (kbd "Τ"))
+  (define-key key-translation-map (kbd "M-g U") (kbd "Υ"))
+  (define-key key-translation-map (kbd "M-g F") (kbd "Φ"))
+  (define-key key-translation-map (kbd "M-g J") (kbd "Φ"))
+  (define-key key-translation-map (kbd "M-g C") (kbd "Χ"))
+  (define-key key-translation-map (kbd "M-g Y") (kbd "Ψ"))
+  (define-key key-translation-map (kbd "M-g W") (kbd "Ω"))
 #+END_SRC
 ** Helm
 #+BEGIN_SRC emacs-lisp
@@ -1437,6 +1453,7 @@ Enter Greek letters directly into buffer. Sometimes useful in =org-mode= instead
   ;; Helm keybindings
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
   (global-set-key (kbd "C-x b") 'helm-mini)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 #+END_SRC
