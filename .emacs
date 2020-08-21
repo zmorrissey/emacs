@@ -234,12 +234,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
+ '(org-agenda-files
    (quote
-    (xkcd zenburn-theme writeroom-mode wrap-region which-key use-package sublimity solarized-theme smartparens slime realgud rainbow-delimiters palimpsest org-ref org-pomodoro org-edit-latex org-bullets org-bookmark-heading org-ac ob-ipython nov nlinum neotree minimap md4rd matlab-mode magit lorem-ipsum ledger-mode interleave helm-swoop helm-projectile helm-dictionary go gnugo git-gutter-fringe frame-cmds eyebrowse exec-path-from-shell evil-tutor evil-surround evil-org evil-mc evil-leader ess epc engine-mode elpy ein docker discover dired+ diminish diff-hl dictionary csv-mode browse-kill-ring anchored-transpose all-the-icons ace-jump-mode ac-js2))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+    ("~/Lab/Notebook/leow-lab.org" "~/Documents/Personal/personal.org" "~/UIC/Logistics/grad-school.org"))))
