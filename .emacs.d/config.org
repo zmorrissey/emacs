@@ -657,6 +657,7 @@ Some custom evil-leader keymaps that I frequently use.
 
     ;; A-Z
     "B"     'ibuffer
+    "C"     'calculator
     "E"     'sudo-edit
     "H"     'hs-toggle-hiding
     "I"     'ess-indent-command
@@ -727,7 +728,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'scheme-mode 'emacs)
   (evil-set-initial-state 'inferior-scheme-mode 'emacs)
   (evil-set-initial-state 'shell-mode 'emacs)
-
+  (evil-set-initial-state 'calculator-mode 'emacs)
 
 
 #+END_SRC
