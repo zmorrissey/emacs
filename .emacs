@@ -5,6 +5,7 @@
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -13,7 +14,7 @@
 
 (eval-when-compile
   (require 'use-package))
-(require 'diminish)
+
 (require 'bind-key)
 
 ;; Load packages
@@ -29,8 +30,8 @@
 (use-package anaconda-mode
   :ensure t
   :disabled)
-(use-package anchored-transpose
-  :ensure t)
+;(use-package anchored-transpose
+;  :ensure t)
 (use-package async
   :ensure t)
 (use-package tex
@@ -67,14 +68,8 @@
   :ensure t)
 (use-package diminish
   :ensure t)
-(use-package dired+
-  :ensure t)
 (use-package ein
-  :ensure t
-  :config
-  (require 'ein)
-  (require 'ein-notebook)
-  (require 'ein-subpackages))
+  :ensure t)
 (use-package elpy
   :ensure t
   :mode ("\\.py\\'" . python-mode))
@@ -108,10 +103,10 @@
   :ensure t)
 (use-package find-file-in-project
   :ensure t)
-(use-package frame-cmds
-  :ensure t)
-(use-package frame-fns
-  :ensure t)
+;(use-package frame-cmds
+;  :ensure t)
+;(use-package frame-fns
+;  :ensure t)
 (use-package git-commit
   :ensure t)
 (use-package git-gutter-fringe
@@ -152,6 +147,8 @@
   :ensure t
   :init
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+(use-package org
+  :ensure org-plus-contrib)
 (use-package org-ac
   :ensure t)
 (use-package org-bookmark-heading
@@ -187,6 +184,8 @@
   :ensure t
   :init
   (sublimity-mode -1))
+(use-package tj3-mode
+  :ensure t)
 (use-package which-key
   :ensure t
   :init
