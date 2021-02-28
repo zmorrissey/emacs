@@ -1,3 +1,0 @@
-#+TITLE: Emacs dotfiles
-
-Dotfiles for configuring Emacs. Currently running =v25.3.2=.
