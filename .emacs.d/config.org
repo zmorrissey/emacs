@@ -272,7 +272,11 @@ Don't wrap words at end of line.
 *** Line numbers
 
 #+BEGIN_SRC emacs-lisp
-(add-hook 'prog-mode-hook 'nlinum-mode t)
+  (add-hook 'prog-mode-hook 'nlinum-mode t)
+  (add-hook 'latex-mode-hook 'nlinum-mode t)
+  (add-hook 'tex-mode-hook 'nlinum-mode t)
+  (add-hook 'TeX-latex-mode 'nlinum-mode t)
+  (add-hook 'LaTeX-mode-hook 'nlinum-mode t)
 #+END_SRC
 ** Menu bar
 #+BEGIN_SRC emacs-lisp
@@ -1027,7 +1031,7 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
     (setq org-src-window-setup 'other-window)
 
     ;; Disable src block evaluation on export
-    (setq org-export-babel-evaluate nil)
+    ;(setq org-export-babel-evaluate nil)
 
     ;; Set ipython minted same as python
     (add-to-list 'org-latex-minted-langs '(ipython "python"))
@@ -1146,7 +1150,7 @@ Sets default inline image width smaller to view in frame
       :PAGES: %p
       :DOI: %D
       :URL: %U
-      :INTERLEAVE_PDF: /home/zdm/Zotero/archive/
+      :INTERLEAVE_PDF: %F
      :END:
 
     ")
@@ -1578,12 +1582,20 @@ Set sentences to be a period (full-stop) followed by one space.
   (setq sentence-end-double-space nil)
 #+END_SRC
 ** Spellcheck
-Use =flyspell= for spell-checking in org-mode.
+Use =flyspell= for spell-checking in org-mode and latex-mode.
 
 #+BEGIN_SRC emacs-lisp
   (autoload 'flyspell-mode "flyspell" "On-the-fly spelling checker." t)
   (add-hook 'org-mode-hook 'flyspell-mode t)
   (add-hook 'org-mode-hook 'flyspell-buffer)
+  (add-hook 'latex-mode-hook 'flyspell-mode t)
+  (add-hook 'latex-mode-hook 'flyspell-buffer)
+  (add-hook 'tex-mode-hook 'flyspell-mode t)
+  (add-hook 'tex-mode-hook 'flyspell-buffer)
+  (add-hook 'TeX-latex-mode 'flyspell-mode t)
+  (add-hook 'TeX-latex-mode 'flyspell-buffer)
+  (add-hook 'LaTeX-mode-hook'flyspell-mode t)
+  (add-hook 'LaTeX-mode-hook'flyspell-buffer)
 #+END_SRC
 ** Temporary files
 Allocates all temporary files to a 'backup' directory
