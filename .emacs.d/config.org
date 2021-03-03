@@ -733,7 +733,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'shell-mode 'emacs)
   (evil-set-initial-state 'calculator-mode 'emacs)
   (evil-set-initial-state 'eshell-mode 'emacs)
-
+  (evil-set-initial-state 'deft-mode 'emacs)
 #+END_SRC
 
 Make evil-mode insert state act more like native Emacs.
@@ -994,6 +994,7 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
        (shell . t)
        (C . t)
        (ledger . t)
+       (dot . t)
        (ipython . t)
        ))
 
@@ -1264,6 +1265,13 @@ Sets default inline image width smaller to view in frame
   (require 'ox-taskjuggler)
   (setq org-taskjuggler-target-version 3.5)
 #+END_SRC
+*** Zettelkasten
+#+begin_src emacs-lisp
+(setq zetteldeft-link-indicator "§"
+      zetteldeft-id-format "%Y-%m-%d-%H%M"
+      zetteldeft-id-regex "[0-9]\\{4\\}\\(-[0-9]\\{2,\\}\\)\\{3\\}"
+      zetteldeft-tag-regex "[#@][a-z-]+")
+#+end_src
 * Encryption
 ** EasyPG
 #+BEGIN_SRC emacs-lisp
