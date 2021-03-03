@@ -1137,7 +1137,6 @@ Sets default inline image width smaller to view in frame
          org-ref-default-bibliography '("~/Zotero/library.bib")
          org-ref-pdf-directory "~/Zotero/archive/"
          bibtex-completion-pdf-field "file"
-         org-ref-get-pdf-filename-function 'org-ref-get-zotero-pdf-filename
          )
  #+END_SRC
 **** Customizations
@@ -1182,6 +1181,8 @@ Sets default inline image width smaller to view in frame
           (bibtex-search-entry key nil 0)
           (setq entry (bibtex-parse-entry))
           (org-ref-reftex-get-bib-field "file" entry))))
+
+  (setq org-ref-get-pdf-filename-function 'org-ref-get-zotero-pdf-filename)
 
   ;; Override this function.
   (defun org-ref-open-bibtex-pdf ()
