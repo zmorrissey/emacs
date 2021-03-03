@@ -1132,16 +1132,19 @@ Sets default inline image width smaller to view in frame
   #+END_SRC
 **** Directories
  #+BEGIN_SRC emacs-lisp
- (setq org-ref-notes-directory "~/Zotero/notes/"
-       org-ref-bibliography-notes "~/Zotero/articles.org"
-       org-ref-default-bibliography '("~/Zotero/library.bib")
-       org-ref-pdf-directory "~/Zotero/articles/")
+   (setq org-ref-notes-directory "~/Zotero/notes/"
+         org-ref-bibliography-notes "~/Zotero/articles.org"
+         org-ref-default-bibliography '("~/Zotero/library.bib")
+         org-ref-pdf-directory "~/Zotero/archive/"
+         bibtex-completion-pdf-field "file"
+         org-ref-get-pdf-filename-function 'org-ref-get-zotero-pdf-filename
+         )
  #+END_SRC
 **** Customizations
 #+BEGIN_SRC emacs-lisp
   ;; Custom org-ref-note-title-format for interleaving pdf
   (setq org-ref-note-title-format
-  "** TODO %y - %t
+  "* TODO %y - %t
   :PROPERTIES:
       :Custom_ID: %k
       :AUTHOR: %9a
@@ -1153,13 +1156,53 @@ Sets default inline image width smaller to view in frame
       :URL: %U
       :INTERLEAVE_PDF: %F
      :END:
-
     ")
-  ; Set hook to nil to allow for custom org-ref-note-title-format
+  ;;; Set hook to nil to allow for custom org-ref-note-title-format
   (setq org-ref-create-notes-hook nil)
 
-  ;; Disable showing broken links to improve speed
+  ;;; Disable showing broken links to improve speed
   (setq org-ref-show-broken-links nil)
+
+  ;;; Customize org-ref-open-bibtex-pdf function to
+  ;;; access the FILE field of bibtex entries,
+  ;;; since by default it looks for files that are
+  ;;; named KEY.pdf, where KEY is the bibtex key
+  ;;;
+  ;;; Modified from https://github.com/syl20bnr/spacemacs/issues/9013
+
+  (defun org-ref-get-zotero-pdf-filename (key)
+    "Return the pdf filename indicated by zotero file field.
+     Argument KEY is the bibtex key."
+    (let* ((results (org-ref-get-bibtex-key-and-file key))
+             (bibfile (cdr results))
+             entry)
+        (with-temp-buffer
+          (insert-file-contents bibfile)
+          (bibtex-set-dialect (parsebib-find-bibtex-dialect) t)
+          (bibtex-search-entry key nil 0)
+          (setq entry (bibtex-parse-entry))
+          (org-ref-reftex-get-bib-field "file" entry))))
+
+  ;; Override this function.
+  (defun org-ref-open-bibtex-pdf ()
+    "Open pdf for a bibtex entry, if it exists.
+    assumes point is in the entry of interest in the bibfile.
+    But does not check that."
+    (interactive)
+    (save-excursion
+      (bibtex-beginning-of-entry)
+      (let* ((bibtex-expand-strings t)
+             (entry (bibtex-parse-entry t))
+             (key (reftex-get-bib-field "=key=" entry))
+             (pdf (org-ref-get-zotero-pdf-filename key)))
+        (message "%s" pdf)
+        (if (file-exists-p pdf)
+            (org-open-link-from-string (format "[[file:%s]]" pdf))
+          (ding)))))
+
+  ;;; For org-ref-open-bibtex-notes, option %F set to entry from
+  ;;; FILE key of bibtex entry
+
 #+END_SRC
 *** Other LaTeX classes
 
