@@ -60,6 +60,13 @@
   :ensure t)
 (use-package deferred
   :ensure t)
+(use-package deft
+  :ensure t
+  :custom
+  (deft-extensions '("org" "md" "txt"))
+  (deft-directory "~/Zotero/zettelkasten")
+  (deft-use-filename-as-title t)
+  )
 (use-package docker
   :ensure t)
 (use-package dictionary
@@ -201,7 +208,11 @@
   :ensure t
   :config
   (load-theme 'zenburn t))
-
+(use-package zetteldeft
+  :ensure t
+  :after deft
+  :config (zetteldeft-set-classic-keybindings)
+  )
 (org-babel-load-file "~/.emacs.d/config.org")
 (put 'dired-find-alternate-file 'disabled nil)
 
