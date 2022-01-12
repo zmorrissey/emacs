@@ -1009,7 +1009,8 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
 
     ;; Source code syntax highlight for PDF export
     (require 'ox-latex)
-    (add-to-list 'org-latex-packages-alist '("" "minted"))
+    ;;(add-to-list 'org-latex-packages-alist '("" "minted"))
+    (add-to-list 'org-latex-packages-alist '("" "minted" "booktabs"))
     (setq org-latex-listings 'minted)
     (setq org-latex-minted-options
           ;; Break long lines, top and bottom frame lines, no background color
@@ -1113,6 +1114,9 @@ Sets default inline image width smaller to view in frame
 #+begin_src emacs-lisp
   ;;; Change bell noise to sound from beepr package from R.
   (setq org-pomodoro-finished-sound
+        "/home/zdm/R/x86_64-pc-linux-gnu-library/3.4/beepr/sounds/facebook.wav")
+
+  (setq org-pomodoro-short-break-sound
         "/home/zdm/R/x86_64-pc-linux-gnu-library/3.4/beepr/sounds/facebook.wav")
 
 
@@ -1610,6 +1614,7 @@ Alternative to Dired and uses vim-like keybindings.
   (setq ranger-show-dotfiles nil)
 #+END_SRC
 ** Root permissions
+From https://emacsredux.com/blog/2013/04/21/edit-files-as-root/
 #+BEGIN_SRC emacs-lisp
   (defun sudo-edit (&optional arg)
     "Edit currently visited file as root.
