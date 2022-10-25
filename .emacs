@@ -215,7 +215,7 @@
   )
 (org-babel-load-file "~/.emacs.d/config.org")
 (put 'dired-find-alternate-file 'disabled nil)
-
+(setq frame-resize-pixelwise t)
 ;; Customize-variable settings
 (setq custom-file "~/.emacs.d/custom.el")
 ;(load custom-file) ; if desired to load

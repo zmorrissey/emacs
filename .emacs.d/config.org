@@ -567,6 +567,12 @@ Make tabs/spaces consistent across modes.
 
   (setq ess-use-auto-complete nil)
 
+
+  ;;; Automatically scroll R console on input
+  (setq comint-scroll-to-bottom-on-input t)
+  (setq comint-scroll-to-bottom-on-output t)
+  (setq comint-move-point-for-output t)
+
   ;;; Configure assignment key to ";" instead of "_"
   ;;; (Press ";" again to get the semicolon symbol)
   ;(define-key ess-r-mode-map ";" #'ess-insert-assign)
@@ -611,6 +617,11 @@ Make tabs/spaces consistent across modes.
 
    (add-hook 'org-mode-hook 'org-mode-reftex-setup)
  #+END_SRC
+*** Automatic parsing
+#+begin_src emacs-lisp
+  (setq TeX-parse-self t)  ; enable parse on load
+  (setq TeX-auto-save t)  ; enable parse on save
+#+end_src
 * Evil-mode
 ** Custom functions
 #+BEGIN_SRC emacs-lisp
@@ -734,6 +745,7 @@ Default state is evil =<N>=, to make it emacs =<E>=, turn on =(setq evil-default
   (evil-set-initial-state 'calculator-mode 'emacs)
   (evil-set-initial-state 'eshell-mode 'emacs)
   (evil-set-initial-state 'deft-mode 'emacs)
+  (evil-set-initial-state 'nov-mode 'emacs)
 #+END_SRC
 
 Make evil-mode insert state act more like native Emacs.
@@ -1047,6 +1059,16 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
     ;;; Python command for org-babel
     (setq org-babel-python-command "/home/zdm/anaconda3/bin/python3")
   #+END_SRC
+*** Org-beamer
+#+begin_src emacs-lisp
+  (require 'ox-beamer)
+  (add-to-list 'org-latex-classes
+               '("beamer"
+                 "\\documentclass[presentation]{beamer}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection{%s}")))
+#+end_src
 *** Org-bookmark-heading
 Use to bookmark headings in org-mode
 
@@ -1654,6 +1676,17 @@ Use =flyspell= for spell-checking in org-mode and latex-mode.
   (add-hook 'LaTeX-mode-hook'flyspell-mode t)
   (add-hook 'LaTeX-mode-hook'flyspell-buffer)
 #+END_SRC
+
+Add word to dictionary ([[https://stackoverflow.com/questions/22107182/in-emacs-flyspell-mode-how-to-add-new-word-to-dictionary][source]]).
+#+begin_src emacs-lisp
+  (defun my-save-word ()
+    (interactive)
+    (let ((current-location (point))
+           (word (flyspell-get-word)))
+      (when (consp word)
+        (flyspell-do-correct 'save nil (car word) current-location (cadr word) (caddr word) current-location))
+      (message "Saved '%s' to dictionary." (car word))))
+#+end_src
 ** Temporary files
 Allocates all temporary files to a 'backup' directory
 #+BEGIN_SRC emacs-lisp
