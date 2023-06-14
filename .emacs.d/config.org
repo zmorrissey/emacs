@@ -424,8 +424,13 @@ Automatically make shell scripts executable upon save.
 
 *** Python
 #+BEGIN_SRC emacs-lisp
-  (setenv "PATH" (concat "/home/zdm/anaconda3/bin/python3" (getenv "PATH")))
-  (setenv "PATH" (concat "/home/zdm/anaconda3/bin/ipython" (getenv "PATH")))
+  ;(setenv "PATH" (concat "/home/zdm/anaconda3/bin/python3" (getenv "PATH")))
+  ;(setenv "PATH" (concat "/home/zdm/anaconda3/bin/ipython" (getenv "PATH")))
+
+  ;; pyvenv setup
+  (setenv "WORKON_HOME" "/home/zdm/anaconda3/envs")
+  (setq pyvenv-workon "..")  ; base anaconda environment
+  (pyvenv-mode 1)
 
   (setq exec-path (split-string (getenv "PATH") path-separator))
   (setq realgud:pdb-command-name "python3 -m pdb")
@@ -493,10 +498,21 @@ Automatically make shell scripts executable upon save.
   (elpy-enable)
 
   ;; Use python3 with ipython
-  (setq elpy-rpc-python-command "/home/zdm/anaconda3/bin/python3")
-  (setq elpy-syntax-check-command "/home/zdm/anaconda3/bin/flake8")
-  (setq python-shell-interpreter "/home/zdm/anaconda3/bin/ipython"
-        python-shell-interpreter-args "-i --simple-prompt --pprint")
+  ;(setq elpy-rpc-python-command "/home/zdm/anaconda3/bin/python3")
+  ;(setq elpy-syntax-check-command "/home/zdm/anaconda3/bin/flake8")
+  ;(setq python-shell-interpreter "/home/zdm/anaconda3/bin/ipython")
+  ;(setq python-shell-interpreter-args "-i --simple-prompt --pprint")
+
+  (setq elpy-rpc-python-command "python3")
+  (setq elpy-syntax-check-command "flake8")
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt")
+
+  ;(setq python-shell-interpreter "/home/zdm/anaconda3/bin/ipython"
+  ;      python-shell-interpreter-args "-i --simple-prompt --pprint")
+  ;(setq python-shell-interpreter "ipython3"
+  ;      python-shell-interpreter-args "-i --simple-prompt --pprint")
+
 
   ;; PDB
   (setq gud-pdb-command-name "python3 -m pdb")
@@ -811,8 +827,7 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
   (setq org-agenda-files
         (quote
          ("~/Lab/Notebook/leow-lab.org"
-          "~/Documents/Personal/personal.org"
-          "~/UIC/Logistics/grad-school.org")))
+          "~/Documents/Personal/personal.org")))
 #+END_SRC
 *** Blogging
 #+BEGIN_SRC emacs-lisp
