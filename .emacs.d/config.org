@@ -879,23 +879,18 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
   #+BEGIN_SRC emacs-lisp
     (setq org-default-notes-file "~/Documents/notes.org")
     (setq org-capture-templates
-           '(("g"  ; key
-              "Grad School"  ; title
-              entry  ; type
-              (file+headline "/home/zdm/UIC/Logistics/grad-school.org" "Misc") ; file location
-              "* TODO %?\n  %i\n")  ; template
-
-             ("l"
-              "Lab archive"
+          '(
+             ("l"  ; key
+              "Lab archive"  ; title
               entry
-              (file+datetree "/home/zdm/Lab/Notebook/leow-lab.org")
-              "* %?\n  %i\n")
+              (file+datetree "/home/zdm/Lab/Notebook/leow-lab.org")  ; type
+              "* %?\n  %i\n")  ; template
 
              ("L"
               "Lab logistics"
               entry
-              (file+headline "/home/zdm/Lab/Notebook/leow-lab.org" "Logistics")
-              "* %?\n  %i\n")
+              (file+headline "/home/zdm/Lab/Notebook/leow-lab.org" "Inbox")
+              "* TODO %?\n  %i\n")
 
              ("e"
               "Lab events"
@@ -906,7 +901,7 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
              ("p"
               "Personal"
               entry
-              (file+headline "/home/zdm/Documents/Personal/personal.org" "Miscellaneous")
+              (file+headline "/home/zdm/Documents/Personal/personal.org" "Inbox")
               "* TODO %?\n  %i\n")))
   #+END_SRC
 *** Don't ask to confirm evaluation of source blocks
@@ -1120,7 +1115,7 @@ Use to bookmark headings in org-mode
  (setq org-crypt-key nil)
  ;; GPG key to use for encryption
  ;; Either the Key ID or set to nil to use symmetric encryption.
- (setq auto-save-default nil)
+ ;(setq auto-save-default nil)
  ;; Auto-saving does not cooperate with org-crypt.el: so you need
  ;; to turn it off if you plan to use org-crypt.el quite often.
  ;; Otherwise, you'll get an (annoying) message each time you
