@@ -160,8 +160,8 @@
   :ensure t)
 (use-package org-bookmark-heading
   :ensure t)
-(use-package org-bullets
-  :ensure t)
+;(use-package org-bullets
+;  :ensure t)
 (use-package org-edit-latex
   :ensure t)
 (use-package ob-ipython
