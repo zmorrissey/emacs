@@ -775,6 +775,7 @@ Make evil-mode insert state act more like native Emacs.
 
 
 #+END_SRC
+
 ** Evil-org
 Uses evil-like keybindings for =org-mode=.
 #+BEGIN_SRC emacs-lisp
@@ -833,17 +834,33 @@ You can surround in visual-state with =S<textobject>= or =gS<textobject>=. Or in
 #+END_SRC
 **** Custom views
 #+begin_src emacs-lisp
+  ;;; Filtering by tags
+  ;; (setq org-agenda-custom-commands
+  ;;       ;; Filter agenda for only personal or work items
+  ;;       '(("p" . "Personal")
+  ;;         ("pa" "Personal agenda"
+  ;;          ((agenda ""))
+  ;;          ((org-agenda-tag-filter '("+per"))))
+  ;;         ("pt" tags "+per")
+  ;;         ("l" . "Lab")
+  ;;         ("la" "Lab agenda"
+  ;;          ((agenda ""))
+  ;;          ((org-agenda-tag-filter '("+lab"))))
+  ;;         ("lt" tags "+lab")
+  ;;         ))
+
+  ;;; Filter by categories for personal, lab
   (setq org-agenda-custom-commands
         ;; Filter agenda for only personal or work items
         '(("p" . "Personal")
           ("pa" "Personal agenda"
            ((agenda ""))
-           ((org-agenda-tag-filter '("+personal"))))
+           ((org-agenda-category-filter '("+personal"))))
           ("pt" tags "+personal")
           ("l" . "Lab")
           ("la" "Lab agenda"
            ((agenda ""))
-           ((org-agenda-tag-filter '("+lab"))))
+           ((org-agenda-category-filter '("+lab"))))
           ("lt" tags "+lab")
           ))
 #+end_src

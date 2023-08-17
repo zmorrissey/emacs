@@ -30,8 +30,6 @@
 (use-package anaconda-mode
   :ensure t
   :disabled)
-;(use-package anchored-transpose
-;  :ensure t)
 (use-package async
   :ensure t)
 (use-package tex
@@ -110,10 +108,6 @@
   :ensure t)
 (use-package find-file-in-project
   :ensure t)
-;(use-package frame-cmds
-;  :ensure t)
-;(use-package frame-fns
-;  :ensure t)
 (use-package git-commit
   :ensure t)
 (use-package git-gutter-fringe
@@ -160,8 +154,6 @@
   :ensure t)
 (use-package org-bookmark-heading
   :ensure t)
-;(use-package org-bullets
-;  :ensure t)
 (use-package org-edit-latex
   :ensure t)
 (use-package ob-ipython
@@ -218,6 +210,6 @@
 (setq frame-resize-pixelwise t)
 ;; Customize-variable settings
 (setq custom-file "~/.emacs.d/custom.el")
-;(load custom-file) ; if desired to load
+(load custom-file) ; if desired to load
 (put 'downcase-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
